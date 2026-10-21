@@ -2,7 +2,9 @@
 
     python -I tools/extract.py "Metroid Prime (USA).iso" work
 
-Пишет work/inventory.tsv: type, id, pak, имя из таблицы имён PAK, размер.
+Пишет work/inventory.tsv: type, id, pak, имя из таблицы имён PAK, размер,
+и work/scans.tsv: SCAN id, STRG id, категория логбука (0 нет, 1 пираты,
+2 Чозо, 3 существа, 4 исследования), важность — для контекста перевода.
 Один и тот же ресурс лежит в нескольких PAK; файл пишется один раз, а
 расхождение содержимого между PAK — ошибка (тогда подмена по id неоднозначна).
 """
@@ -22,6 +24,7 @@ def main(iso_path, out):
     rows = []
     font_textures = set()
     textures = {}  # id -> bytes (все TXTR, нужные отберём после)
+    scans = {}
     with open(iso_path, "rb") as iso:
         for name, off, size in mp.disc_files(iso):
             if not name.lower().endswith(".pak"):
@@ -30,6 +33,12 @@ def main(iso_path, out):
             pak = iso.read(size)
             names = mp.pak_names(pak)
             for rtype, rid, data in mp.pak_resources(pak):
+                if rtype == "SCAN":
+                    # CScannableObjectInfo: version, magic, frame, string, speed, category, important
+                    strg_id, category = struct.unpack_from(">I4xI", data, 12)
+                    important = data[24] if struct.unpack_from(">I", data)[0] > 4 else 0
+                    scans[rid] = (strg_id, category, important)
+                    continue
                 if rtype == "TXTR":
                     textures.setdefault(rid, data)
                     continue
@@ -54,7 +63,11 @@ def main(iso_path, out):
         f.write("type\tid\tpak\tname\tsize\n")
         for r in sorted(rows):
             f.write("\t".join(r) + "\n")
-    counts = {}
+    with open(os.path.join(out, "scans.tsv"), "w") as f:
+        f.write("scan\tstrg\tcategory\timportant\n")
+        for rid, (sid, cat, imp) in sorted(scans.items()):
+            f.write(f"{rid:08X}\t{sid:08X}\t{cat}\t{imp}\n")
+    counts = {"SCAN": len(scans)}
     for rtype, _ in seen:
         counts[rtype] = counts.get(rtype, 0) + 1
     print(" ".join(f"{k}={v}" for k, v in sorted(counts.items())))

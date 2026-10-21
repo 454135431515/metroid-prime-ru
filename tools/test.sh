@@ -8,3 +8,5 @@ if git diff --cached --name-only | grep -E -i '\.(iso|rvz|gcm|appimage|pak|strg|
   echo "test.sh: в индексе данные игры/бинарники (см. выше)" >&2
   exit 1
 fi
+
+python -I tools/test_roundtrip.py work

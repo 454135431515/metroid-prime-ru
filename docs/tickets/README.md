@@ -7,7 +7,7 @@
 |---|---|---|
 | T0 | Репозиторий, контракт, ADR 0001, хук | done |
 | T1 | Распаковка ISO и PAK, инвентарь ресурсов | done |
-| T2 | STRG dump/build, round-trip, `en.json` с контекстом | todo |
+| T2 | STRG dump/build, round-trip, `en.json` с контекстом | done |
 | T3 | Исследование FONT/TXTR, upper-case в коде, ADR 0002 | todo |
 | T4 | Генерация кириллицы в FONT/TXTR | todo |
 | T5 | Вертикальный срез: «Новая игра» на экране | todo |
