@@ -108,7 +108,22 @@ class Metrics:
         self.desc = max(len(self.mask("p")) - self.xh, 2)  # выносной элемент вниз
 
     def mask(self, ch):
+        if ch in self.overrides:
+            return self.overrides[ch]
         return ink_mask(self.cells[ch])
+
+    overrides = {}
+
+    def lower(self):
+        """Те же мерки на x-высоте: конструкторы заглавных рисуют строчные (Deface — капитель).
+        Латинские образцы конструкторов заменяются строчными или сжатыми до x-высоты."""
+        lo = _copy.copy(self)
+        lo.h = self.xh
+        lo.mid = (self.xh - self.t) // 2
+        lo.overrides = {"U": self.mask("u"), "W": self.mask("w"), "C": self.mask("c"),
+                        "O": self.mask("o"), "E": self.mask("e"),
+                        "K": shrink_rows(self.mask("K"), self.xh)}
+        return lo
 
 
 class Drawn:
@@ -351,18 +366,92 @@ CAPITALS = {
     "Ю": ("H", ("draw", cap_Ю)), "Ё": ("E", ("draw", cap_Ё)),
 }
 
-# строчные среза T4a; полный набор — T4c
+def low(fn):
+    """Конструктор заглавной, вызванный на x-высоте."""
+    return lambda P: fn(P.lower())
+
+
+def low_ф(P):
+    """ф: стем от высоты заглавных до низа выносного, чаша на x-высоте."""
+    lo = P.lower()
+    up, s, t = P.h - P.xh, P.s, P.t
+    w = P.w + 4
+    bowl = canvas(w, P.xh)
+    soft_box(bowl, 0, 0, w, P.xh, s, t)
+    m = canvas(w, up) + bowl + canvas(w, P.desc)
+    c = (w - s) // 2
+    rect(m, c, 0, c + s, len(m))
+    return Drawn(m, above=up, below=P.desc)
+
+
+def low_small(L):
+    """Заглавная латинская L, сжатая до x-высоты."""
+    return lambda P: Drawn(shrink_rows(P.mask(L), P.xh))
+
+
 LOWERCASE = {
-    "о": ("o", ("copy", "o")),
-    "а": ("a", ("copy", "a")),
-    "р": ("p", ("copy", "p")),
-    "г": ("r", ("copy", "r")),
-    "в": ("n", ("small", "B")),
+    "а": ("a", ("copy", "a")), "е": ("e", ("copy", "e")), "о": ("o", ("copy", "o")),
+    "р": ("p", ("copy", "p")), "с": ("c", ("copy", "c")), "у": ("y", ("copy", "y")),
+    "х": ("x", ("copy", "x")), "п": ("n", ("copy", "n")), "м": ("m", ("copy", "m")),
+    "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("6", ("copy", "6")),
+    "в": ("n", ("draw", low_small("B"))), "з": ("n", ("draw", low_small("3"))),
+    "к": ("n", ("draw", low_small("K"))), "н": ("n", ("draw", low_small("H"))),
+    "т": ("n", ("draw", low_small("T"))), "ч": ("n", ("draw", low_small("4"))),
     "я": ("n", ("small_mirror", "R")),
-    "и": ("n", ("draw_x", None)),
+    "д": ("n", ("draw", low(cap_Д))), "ж": ("n", ("draw", low(cap_Ж))),
+    "и": ("n", ("draw", low(cap_И))), "й": ("n", ("draw", low(cap_Й))),
+    "л": ("n", ("draw", low(cap_Л))), "ф": ("n", ("draw", low_ф)),
+    "ц": ("u", ("draw", low(cap_Ц))), "щ": ("w", ("draw", low(cap_Щ))),
+    "ъ": ("n", ("draw", low(cap_Ъ))), "ы": ("n", ("draw", low(cap_Ы))),
+    "ь": ("n", ("draw", low(cap_Ь))), "э": ("c", ("draw", low(cap_Э))),
+    "ю": ("n", ("draw", low(cap_Ю))), "ё": ("e", ("draw", low(cap_Ё))),
 }
 
-RECIPES = {**CAPITALS, **LOWERCASE}
+
+def chevron(h, d, left=True):
+    """Уголок высотой h (нечётная), штрих d по горизонтали."""
+    half = h // 2
+    w = half + d
+    m = canvas(w, h)
+    for j in range(h):
+        x = abs(half - j)
+        if not left:
+            x = half - x
+        rect(m, x, j, x + d, j + 1)
+    return m
+
+
+def quote(P, left):
+    """« »: два уголка по центру x-высоты, ячейка образца 'n' (x-высота)."""
+    hc = P.xh * 2 // 3 | 1
+    d = max(P.s // 2 + 1, 2)
+    one = chevron(hc, d, left)
+    pair = hjoin(one, one, gap=1)
+    top = (P.xh - hc) // 2
+    m = canvas(len(pair[0]), top) + pair + canvas(len(pair[0]), P.xh - top - hc)
+    return Drawn(m)
+
+
+def dash(P):
+    """—: дефис шрифта, растянутый до ширины заглавной + 4."""
+    hy = P.mask("-")
+    w = P.w + 4
+    return Drawn([[v for v in [r[0]] * w] for r in hy])
+
+
+def ellipsis(P):
+    dot = P.mask(".")
+    return Drawn(hjoin(dot, dot, dot, gap=max(P.s // 2, 1)))
+
+
+PUNCTUATION = {
+    "«": ("n", ("draw", lambda P: quote(P, True))),
+    "»": ("n", ("draw", lambda P: quote(P, False))),
+    "—": ("-", ("draw", dash)),
+    "…": (".", ("draw", ellipsis)),
+}
+
+RECIPES = {**CAPITALS, **LOWERCASE, **PUNCTUATION}
 
 
 # --- сборка --------------------------------------------------------------
