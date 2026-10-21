@@ -12,3 +12,5 @@ fi
 python -I tools/test_roundtrip.py work
 python -I tools/test_cyrillic.py work
 python -I tools/test_build_mod.py work
+python -I tools/validate.py work/res text/ru.json
+python -I tools/test_validate.py work
