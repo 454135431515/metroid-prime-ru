@@ -1,0 +1,10 @@
+# Данные Nintendo и бинарники — не в git
+*.iso
+*.rvz
+*.gcm
+*.appimage
+*.AppImage
+work/
+mod/
+text/en.json
+__pycache__/
