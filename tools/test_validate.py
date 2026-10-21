@@ -52,6 +52,12 @@ def main(work):
                   open(p, "w", encoding="utf-8"), ensure_ascii=False)
         errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
         assert any("висячая" in e for e in errors), errors
+        # наложение соседних полей: полные «Обычный режим» и «Сложный режим» в строке выбора режима
+        e0 = dict(strg.parse(open(os.path.join(res, "STRG", "0552A456.STRG"), "rb").read()))["ENGL"]
+        json.dump({sid: {"101": {"en": h(e0[101]), "ru": "Обычный режим"}, "102": {"en": h(e0[102]), "ru": "Сложный режим"}}},
+                  open(p, "w", encoding="utf-8"), ensure_ascii=False)
+        errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
+        assert any("наложение" in e for e in errors), errors
     print("validate: negative ok")
     return 0
 

@@ -79,7 +79,7 @@ def load_panes(res, path):
     grp = groups(res)
     rules = []
     for name, r in json.load(open(path, encoding="utf-8")).items():
-        if name == "_":
+        if name.startswith("_"):
             continue
         keys = set()
         for spec in r["keys"]:
@@ -160,6 +160,61 @@ def layout_errors(rule, key, en, ru, english_of):
     return errs, todo
 
 
+def overlap_errors(res, layout, ru, english_of, font_info):
+    """Соседние поля одного кадра: прямоугольники самого длинного текста не пересекаются по-русски,
+    если не пересекаются по-английски (тени «…b» и задуманные наложения оригинала не считаются)."""
+    import csv
+    import json
+    import frme
+    names = {}
+    for r in csv.DictReader(open(os.path.join(os.path.dirname(res), "inventory.tsv")), delimiter="\t"):
+        if r["type"] == "FRME" and r["name"]:
+            names[r["name"]] = r["id"]
+    panes = frme.all_panes(res, full=True)
+    grp = groups(res)
+    per_pane = {}
+    for rname, r in json.load(open(layout, encoding="utf-8")).items():
+        if rname.startswith("_"):
+            continue
+        keys = []
+        for spec in r["keys"]:
+            keys += grp[spec] if spec.startswith("@") else expand(spec)
+        for want in r["panes"]:
+            frame, _, pane = want.rpartition("/")
+            for (fid, pname) in panes:
+                if pname == pane and (not frame or names.get(frame) == fid):
+                    per_pane.setdefault((fid, pname), set()).update(keys)
+    worlds, boxes = {}, {}
+    for (fid, pname), keys in per_pane.items():
+        if fid not in worlds:
+            worlds[fid] = frme.world_transforms(open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read())
+        pane = panes[(fid, pname)]
+        adv, line_h = font_info(pane[0])
+        width = lambda t: max(sum(adv.get(c, 0) for c in ln) for ln in TAG.sub("", t).split("\n"))
+        en_txt = [english_of(k) for k in keys if english_of(k)]
+        ru_txt = [ru.get(k.split(":")[0], {}).get(k.split(":")[1], {}).get("ru") or english_of(k) for k in keys]
+        ru_txt = [t for t in ru_txt if t]
+        if not en_txt or not ru_txt:
+            continue
+        en_w, ru_w = max(map(width, en_txt)), max(map(width, ru_txt))
+        en_n = max(t.count("\n") + 1 for t in en_txt)
+        ru_n = max(t.count("\n") + 1 for t in ru_txt)
+        ru_long = max(ru_txt, key=width)
+        boxes[(fid, pname)] = (frme.text_box(worlds[fid][pname], pane, en_w, en_n, line_h),
+                               frme.text_box(worlds[fid][pname], pane, ru_w, ru_n, line_h), ru_long)
+    exclusive = {frozenset(x) for x in json.load(open(layout, encoding="utf-8")).get("_exclusive", [])}
+    hit = lambda a, b: a[0] < b[1] and b[0] < a[1] and a[2] < b[3] and b[2] < a[3]
+    errs = []
+    items = sorted(boxes.items())
+    for i, ((fa, na), (ea, ra, ta)) in enumerate(items):
+        for (fb, nb), (eb, rb, tb) in items[i + 1:]:
+            if fa != fb or na.rstrip("b") == nb.rstrip("b") or frozenset((na, nb)) in exclusive:
+                continue
+            if hit(ra, rb) and not hit(ea, eb):
+                errs.append(f"наложение текста в кадре {fa}: {na} {ta!r} и {nb} {tb!r}")
+    return errs
+
+
 def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
     import json
     ru = json.load(open(ru_path, encoding="utf-8"))
@@ -209,6 +264,8 @@ def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
                     todo += [f"{key}: {t}" for t in tds]
             if en.count("\n") != text.count("\n") and not in_layout:
                 warnings.append(f"{key}: переносов {text.count(chr(10))}, в английском {en.count(chr(10))}")
+    if rules:
+        errors += overlap_errors(res, layout, ru, english_of, rules[0][-1])
     if os.path.isfile(constraints):
         m = RATCHET.search(open(constraints, encoding="utf-8").read())
         if m and count < int(m.group(1)):
