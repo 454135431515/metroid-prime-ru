@@ -1,6 +1,6 @@
 """Проверка text/ru.json против таблиц диска (CONSTRAINTS.md, «Перевод»).
 
-    python -I tools/validate.py work/res text/ru.json
+    python -I tools/validate.py work/res text/ru.json [--quiet]   # --quiet: без списка предупреждений
 
 Ошибки (выход 1): индекс вне таблицы; исходник изменился (хеш); пустой перевод; набор тегов
 `&…;` не совпадает с английским; символ, которого нет в шрифтах; переведённых строк меньше,
@@ -231,13 +231,14 @@ def cyrillic_main_quiet(res, out):
         cyrillic.main(res, out)
 
 
-def main(res, ru_path):
+def main(res, ru_path, quiet=False):
     if not os.path.isdir(res) or not os.path.isfile(ru_path):
         print(f"validate: нет {res} или {ru_path}, пропуск")
         return 0
     errors, warnings, count = check(res, ru_path)
     for w in warnings:
-        print("warning:", w)
+        if not quiet:
+            print("warning:", w)
     by_pane = collections.Counter(w.split(": ")[2] for w in warnings if w.startswith("проверить в игре"))
     warnings = [w for w in warnings if not w.startswith("проверить в игре")] + \
         [w for w in warnings if w.startswith("проверить в игре")]
@@ -250,4 +251,4 @@ def main(res, ru_path):
 
 
 if __name__ == "__main__":
-    sys.exit(main(*sys.argv[1:3]))
+    sys.exit(main(*sys.argv[1:3], quiet="--quiet" in sys.argv))
