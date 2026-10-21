@@ -9,6 +9,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import font  # noqa: E402
 import strg  # noqa: E402
 
 
@@ -26,7 +27,9 @@ def main(work):
         print(f"test_roundtrip: {res} нет, пропуск (запусти tools/extract.py)")
         return 0
     failed = 0
-    for kind, (parse, build) in {"STRG": (strg.parse, strg.build)}.items():
+    for kind, (parse, build) in {"STRG": (strg.parse, strg.build),
+                                 "FONT": (font.parse_font, font.build_font),
+                                 "TXTR": (font.parse_txtr, font.build_txtr)}.items():
         n, bad = check(os.path.join(res, kind, f"*.{kind}"), parse, build)
         print(f"{kind}: {n - bad}/{n} ok")
         failed += bad
