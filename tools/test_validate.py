@@ -40,6 +40,12 @@ def main(work):
             c.write("| Переведённых вхождений строк | 100 из 2323 | только растёт |")
         errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "c.md"))
         assert any(e.startswith("ratchet") for e in errors), errors
+        # кнопка снаряжения: слово шире окна
+        inv = {"500EC6A0": {"11": {"en": h(dict(strg.parse(open(os.path.join(res, "STRG", "500EC6A0.STRG"), "rb").read()))["ENGL"][11]),
+                                   "ru": "Морфо-шар"}}}
+        json.dump(inv, open(p, "w", encoding="utf-8"), ensure_ascii=False)
+        errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
+        assert any("не влезает" in e for e in errors), errors
     print("validate: negative ok")
     return 0
 
