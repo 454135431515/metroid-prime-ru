@@ -133,6 +133,8 @@ def layout_errors(rule, key, en, ru, english_of):
             lines = wrap(plain_ru, adv, ex)
             wide = [ln for ln in lines if width(ln) > ex]
             en_lines = len(wrap(plain_en, adv, ex))
+            if len(lines) > 1 and lines[-1].strip() and sum(c.isalnum() for c in lines[-1]) < 3:
+                errs.append(f"висячая строка в поле {name}: {lines}")
             if wide:
                 errs.append(f"слово шире поля {name} ({ex} px): {wide}")
             elif scroll:

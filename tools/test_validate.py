@@ -46,6 +46,12 @@ def main(work):
         json.dump(inv, open(p, "w", encoding="utf-8"), ensure_ascii=False)
         errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
         assert any("шире поля" in e for e in errors), errors
+        # висячий обрывок «A?» на последней строке
+        en8 = dict(strg.parse(open(os.path.join(res, "STRG", "19C3F7F7.STRG"), "rb").read()))["ENGL"][8]
+        json.dump({"19C3F7F7": {"8": {"en": h(en8), "ru": "Сохранить прогресс на карту памяти в слоте A?"}}},
+                  open(p, "w", encoding="utf-8"), ensure_ascii=False)
+        errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
+        assert any("висячая" in e for e in errors), errors
     print("validate: negative ok")
     return 0
 
