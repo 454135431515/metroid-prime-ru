@@ -9,9 +9,9 @@
 ## Предположения (проверяются по ходу; статус меняется здесь)
 | # | Предположение | Статус | Где проверяется |
 |---|---|---|---|
-| A1 | Loose `<id>.FONT` и `<id>.TXTR` подменяют ресурс так же, как STRG | по коду да (`port_mods_pak.cpp`: любой 4-буквенный тип), проверить в игре | T4a |
-| A2 | Атлас выше исходного влезает в heap игры | проверить | T4a |
-| A3 | Глиф, который уже есть в FONT, порт не заменяет stand-in'ом (`PortAddStandIns`: `HasGlyph` → skip) | прочитано в коде, проверить в игре | T4a |
+| A1 | Loose `<id>.FONT` и `<id>.TXTR` подменяют ресурс так же, как STRG | проверено в игре (T4a) | — |
+| A2 | Атлас выше исходного влезает в heap игры | проверено в игре (T4a), POT 256×256/512×512 | — |
+| A3 | Глиф, который уже есть в FONT, порт не заменяет stand-in'ом (`PortAddStandIns`: `HasGlyph` → skip) | проверено в игре (T4a) | — |
 | A4 | HD-шрифт по умолчанию выключен (`.sdfont` только из модов); его включает Remastered-импорт, и тогда строка смешивает HD-латиницу и растровую кириллицу (с первой буквы без глифа в sdfont — растр) | по коду; смешение — известное ограничение до TR2 | TR2 |
 | A5 | Отображаемый текст игра не переводит в верхний регистр | проверено (T3): `toupper` только для FourCC (`IObj.cpp`, `CFactoryMgr.cpp`) | T3 |
 | A6 | На диске одна секция ENGL во всех 1293 STRG | проверено (T2) | — |
@@ -23,7 +23,7 @@ python -I tools/extract.py "Metroid Prime (USA).iso" work   # распаковк
 python -I tools/dump_en.py work text/en.json                 # английский исходник (T2)
 python -I tools/preview_font.py work/res/FONT/<id>.FONT work/res/TXTR out.png "текст"
 tools/test.sh                                                # все проверки = CONSTRAINTS.md
-MP_USER_PATH=work/user MP_MODS=mod ./MetroidPrime-x86_64.appimage "Metroid Prime (USA).iso"
+MP_USER_PATH=work/user MP_MODS=mod work/port/squashfs-root/AppRun "Metroid Prime (USA).iso"   # AppImage распакован: --appimage-extract в work/port
 ```
 
 ## Структура
