@@ -142,3 +142,17 @@ def build_txtr(a):
                     out.append(a.pixels[row + x] << 4 | a.pixels[row + x + 1])
     out += a.tail
     return bytes(out)
+
+
+def cell_rect(g, atlas):
+    """Пиксельная ячейка глифа (x, y, w, h). UV на диске выступают на полпикселя
+    за ячейку с каждой стороны: u0 = (x - 0.5) / W, u1 = (x + cell_w + 0.5) / W."""
+    return round(g.u0 * atlas.width + 0.5), round(g.v0 * atlas.height + 0.5), g.cell_w, g.cell_h
+
+
+def set_cell_uv(g, atlas, x, y):
+    """UV глифа для ячейки в (x, y), по той же схеме, что на диске."""
+    g.u0 = (x - 0.5) / atlas.width
+    g.u1 = (x + g.cell_w + 0.5) / atlas.width
+    g.v0 = (y - 0.5) / atlas.height
+    g.v1 = (y + g.cell_h + 0.5) / atlas.height

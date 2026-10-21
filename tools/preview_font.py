@@ -37,8 +37,8 @@ def render(f, a, text):
             continue
         if prev is not None:
             x += kern.get((prev.char, g.char), 0)
-        box = (round(g.u0 * a.width), round(g.v0 * a.height), round(g.u1 * a.width), round(g.v1 * a.height))
-        cell = src.crop(box)
+        cx, cy, cw, ch_ = font.cell_rect(g, a)
+        cell = src.crop((cx, cy, cx + cw, cy + ch_))
         img.paste(cell, (x + g.a, 4 + f.baseline - g.baseline))
         x += g.a + g.b + g.c
         prev = g
@@ -51,7 +51,8 @@ def main(font_path, txtr_dir, out, text="Metroid Prime: New Game"):
     sheet = atlas_image(a)
     d = ImageDraw.Draw(sheet)
     for g in f.glyphs:
-        d.rectangle([g.u0 * a.width, g.v0 * a.height, g.u1 * a.width - 1, g.v1 * a.height - 1], outline=(60, 160, 255))
+        cx, cy, cw, ch_ = font.cell_rect(g, a)
+        d.rectangle([cx - 1, cy - 1, cx + cw, cy + ch_], outline=(60, 160, 255))
     line = render(f, a, text)
     w = max(sheet.width, line.width)
     out_img = Image.new("RGB", (w, sheet.height + line.height + 4), (0, 0, 0))

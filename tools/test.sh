@@ -10,3 +10,4 @@ if git diff --cached --name-only | grep -E -i '\.(iso|rvz|gcm|appimage|pak|strg|
 fi
 
 python -I tools/test_roundtrip.py work
+python -I tools/test_cyrillic.py work
