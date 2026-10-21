@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mp  # noqa: E402
 
-KEEP = {"STRG", "FONT"}
+KEEP = {"STRG", "FONT", "FRME"}
 
 
 def main(iso_path, out):

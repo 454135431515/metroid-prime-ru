@@ -45,7 +45,7 @@ def main(work):
                                    "ru": "Морфо-шар"}}}
         json.dump(inv, open(p, "w", encoding="utf-8"), ensure_ascii=False)
         errors, _, _ = validate.check(res, p, constraints=os.path.join(tmp, "none"))
-        assert any("не влезает" in e for e in errors), errors
+        assert any("шире поля" in e for e in errors), errors
     print("validate: negative ok")
     return 0
 
