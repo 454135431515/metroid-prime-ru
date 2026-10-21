@@ -11,3 +11,4 @@ fi
 
 python -I tools/test_roundtrip.py work
 python -I tools/test_cyrillic.py work
+python -I tools/test_build_mod.py work
