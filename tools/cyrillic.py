@@ -93,36 +93,291 @@ def diagonal(m, x0, y0, x1, y1, thick):
 
 # --- рецепты -------------------------------------------------------------
 
-def draw_i(w, h, s):
-    """и: два стема и диагональ снизу слева вверх направо."""
-    m = blank(w, h)
+class Metrics:
+    """Мерки шрифта по его латинице: всё, что нужно, чтобы рисовать в стиле Deface."""
+
+    def __init__(self, cells):
+        self.cells = cells
+        hm = self.mask("H")
+        self.s = stem_width(hm)                        # толщина стема
+        self.w = len(hm[0])                            # ширина заглавной
+        self.h = len(hm)                               # высота заглавной
+        full = [j for j, r in enumerate(hm) if all(r)]
+        self.mid, self.t = full[0], len(full)          # средняя перекладина: начало, толщина
+        self.xh = len(self.mask("n"))                  # x-высота
+        self.desc = max(len(self.mask("p")) - self.xh, 2)  # выносной элемент вниз
+
+    def mask(self, ch):
+        return ink_mask(self.cells[ch])
+
+
+class Drawn:
+    """Маска заливки нарисованного глифа. `above`/`below` — строки над/под корпусом образца."""
+
+    def __init__(self, mask, above=0, below=0):
+        self.mask, self.above, self.below = mask, above, below
+
+
+def canvas(w, h):
+    return blank(w, h)
+
+
+def chamfer(m, *corners):
+    """Срезает внешние угловые пиксели (так скруглены замкнутые формы Deface): (x, y) пары."""
+    for x, y in corners:
+        if 0 <= y < len(m) and 0 <= x < len(m[0]):
+            m[y][x] = False
+
+
+def hjoin(*masks, gap=0):
+    """Маски одной высоты рядом слева направо."""
+    h = len(masks[0])
+    out = [[] for _ in range(h)]
+    for k, mk in enumerate(masks):
+        for j in range(h):
+            out[j] += ([False] * gap if k else []) + mk[j]
+    return out
+
+
+def overlay(a, b, dx):
+    """b поверх a со сдвигом dx; ширина — объединение."""
+    w = max(len(a[0]), dx + len(b[0]))
+    out = [r + [False] * (w - len(r)) for r in a]
+    for j, r in enumerate(b):
+        for i, v in enumerate(r):
+            out[j][dx + i] = out[j][dx + i] or v
+    return out
+
+
+def soft_box(m, x0, y0, x1, y1, s, t):
+    """Прямоугольная рамка со скруглёнными внешними углами (как O в Deface)."""
+    rect(m, x0, y0, x1, y0 + t)
+    rect(m, x0, y1 - t, x1, y1)
+    rect(m, x0, y0, x0 + s, y1)
+    rect(m, x1 - s, y0, x1, y1)
+    chamfer(m, (x0, y0), (x1 - 1, y0), (x0, y1 - 1), (x1 - 1, y1 - 1))
+
+
+def soft_sign(P, w, h, mid):
+    """Ь: стем, средняя перекладина, чаша справа снизу."""
+    s, t = P.s, P.t
+    m = canvas(w, h)
     rect(m, 0, 0, s, h)
-    rect(m, w - s, 0, w, h)
-    diagonal(m, s, h - 1 - s // 2, w - 2 * s, s // 2, s)
+    rect(m, 0, mid, w, mid + t)
+    rect(m, w - s, mid, w, h)
+    rect(m, 0, h - t, w, h)
+    chamfer(m, (w - 1, mid), (w - 1, h - 1))
     return m
 
 
+def stems_diag(P, w, h):
+    """И: два стема и ступенчатая диагональ снизу слева вверх направо.
+    Диагональ тоньше стема (s - 1, не меньше 2), иначе в узкой букве не остаётся просвета."""
+    s = P.s
+    d = max(s - 1, 2)
+    m = canvas(w, h)
+    rect(m, 0, 0, s, h)
+    rect(m, w - s, 0, w, h)
+    e = min(P.t, h // 4)  # концы диагонали отступают от краёв, как у X
+    diagonal(m, s - 1, h - 1 - e, w - s - d + 1, e, d)
+    return m
+
+
+def tail(m, x0, x1, below):
+    """Выносной хвост под базовой линией (Д, Ц, Щ)."""
+    w = len(m[0])
+    for _ in range(below):
+        m.append([x0 <= i < x1 for i in range(w)])
+    return m
+
+
+def cap_Б(P):
+    m = soft_sign(P, P.w, P.h, P.mid)
+    rect(m, 0, 0, P.w, P.t)
+    return Drawn(m)
+
+
+def cap_Г(P):
+    m = canvas(P.w, P.h)
+    rect(m, 0, 0, P.s, P.h)
+    rect(m, 0, 0, P.w, P.t)
+    return Drawn(m)
+
+
+def cap_Д(P):
+    s, t, w, h = P.s, P.t, P.w + 2, P.h
+    m = canvas(w, h)
+    rect(m, 2, 0, w - s, t)
+    rect(m, 2, 0, 2 + s, h)
+    rect(m, w - s - 0, 0, w, h)
+    rect(m, 0, h - t, w, h)
+    chamfer(m, (2, 0))
+    tail(m, 0, s - 1, P.desc)
+    for row in m[h:]:
+        for i in range(w - s + 1, w):
+            row[i] = True
+    return Drawn(m, below=P.desc)
+
+
+def cap_Ж(P):
+    k = P.mask("K")
+    return Drawn(overlay([r[::-1] for r in k], k, len(k[0]) - P.s))
+
+
+def cap_И(P):
+    return Drawn(stems_diag(P, P.w + 2, P.h))
+
+
+def cap_Й(P):
+    w = P.w + 2
+    m = stems_diag(P, w, P.h)
+    above = P.t + 1
+    breve = canvas(w, above)
+    rect(breve, P.s, 0, w - P.s, above - 1)
+    return Drawn(breve + m, above=above)
+
+
+def cap_Л(P):
+    """Л: левая нога со ступенькой — сверху сдвинута внутрь, внизу у края (иначе читается как П)."""
+    s, t, w, h = P.s, P.t, P.w, P.h
+    k = max(s // 2, 2)
+    knee = h * 2 // 3
+    m = canvas(w, h)
+    rect(m, k, 0, w, t)
+    rect(m, k, 0, k + s, knee)
+    rect(m, 0, knee - 1, s, h)
+    rect(m, w - s, 0, w, h)
+    chamfer(m, (k, 0), (w - 1, 0))
+    return Drawn(m)
+
+
+def cap_У(P):
+    s, t, w, h, mid = P.s, P.t, P.w, P.h, P.mid
+    m = canvas(w, h)
+    rect(m, 0, 0, s, mid + t)
+    rect(m, w - s, 0, w, h)
+    rect(m, 0, mid, w, mid + t)
+    rect(m, 0, h - t, w, h)
+    chamfer(m, (0, mid + t - 1), (w - 1, h - 1), (0, h - 1))
+    return Drawn(m)
+
+
+def cap_Ф(P):
+    s, t, h = P.s, P.t, P.h
+    w = P.w + 4
+    m = canvas(w, h)
+    soft_box(m, 0, 1, w, h - 1, s, t)
+    c = (w - s) // 2
+    rect(m, c, 0, c + s, h)
+    return Drawn(m)
+
+
+def cap_Ц(P, base=None):
+    s, t, h = P.s, P.t, P.h
+    body = base if base is not None else P.mask("U")
+    w0 = len(body[0])
+    m = [r + [False] * 2 for r in body]
+    for j in range(h - t, h):
+        for i in range(w0 - 1, w0 + 2):
+            m[j][i] = True
+    for j in range(h - t, h):  # угол без скругления: перекладина уходит в хвост
+        m[j][w0 - 1] = True
+    tail(m, w0, w0 + 2, P.desc)
+    return Drawn(m, below=P.desc)
+
+
+def cap_Щ(P):
+    return cap_Ц(P, P.mask("W"))
+
+
+def cap_Ъ(P):
+    k = 2
+    w = P.w + k
+    m = canvas(w, P.h)
+    sign = soft_sign(P, P.w, P.h, P.mid)
+    m = overlay(m, sign, k)
+    rect(m, 0, 0, k + P.s, P.t)
+    return Drawn(m)
+
+
+def cap_Ы(P):
+    sign = soft_sign(P, P.w - 2, P.h, P.mid)
+    stem = canvas(P.s, P.h)
+    rect(stem, 0, 0, P.s, P.h)
+    return Drawn(hjoin(sign, stem, gap=2))
+
+
+def cap_Ь(P):
+    return Drawn(soft_sign(P, P.w, P.h, P.mid))
+
+
+def cap_Э(P):
+    m = [r[::-1] for r in P.mask("C")]
+    w = len(m[0])
+    rect(m, w // 3, P.mid, w, P.mid + P.t)
+    return Drawn(m)
+
+
+def cap_Ю(P):
+    o = P.mask("O")
+    stem = canvas(P.s + 2, P.h)
+    rect(stem, 0, 0, P.s, P.h)
+    rect(stem, P.s, P.mid, P.s + 2, P.mid + P.t)
+    return Drawn(hjoin(stem, o))
+
+
+def cap_Ё(P):
+    above = P.t + 1
+    dots = canvas(P.w, above)
+    d = max(P.s - 1, 2)
+    rect(dots, 1, 0, 1 + d, above - 1)
+    rect(dots, P.w - 1 - d, 0, P.w - 1, above - 1)
+    return Drawn(dots + P.mask("E"), above=above)
+
+
 # символ -> (образец метрик, способ)
-RECIPES = {
-    "Н": ("H", ("copy", "H")),
+CAPITALS = {
+    "А": ("A", ("copy", "A")), "В": ("B", ("copy", "B")), "Е": ("E", ("copy", "E")),
+    "К": ("K", ("copy", "K")), "М": ("M", ("copy", "M")), "Н": ("H", ("copy", "H")),
+    "О": ("O", ("copy", "O")), "Р": ("P", ("copy", "P")), "С": ("C", ("copy", "C")),
+    "Т": ("T", ("copy", "T")), "Х": ("X", ("copy", "X")),
+    "П": ("N", ("copy", "N")), "Ш": ("W", ("copy", "W")), "З": ("3", ("copy", "3")),
+    "Ч": ("4", ("copy", "4")), "Я": ("R", ("mirror", "R")),
+    "Б": ("H", ("draw", cap_Б)), "Г": ("E", ("draw", cap_Г)), "Д": ("H", ("draw", cap_Д)),
+    "Ж": ("K", ("draw", cap_Ж)), "И": ("H", ("draw", cap_И)), "Й": ("H", ("draw", cap_Й)),
+    "Л": ("H", ("draw", cap_Л)), "У": ("H", ("draw", cap_У)), "Ф": ("H", ("draw", cap_Ф)),
+    "Ц": ("U", ("draw", cap_Ц)), "Щ": ("W", ("draw", cap_Щ)), "Ъ": ("H", ("draw", cap_Ъ)),
+    "Ы": ("H", ("draw", cap_Ы)), "Ь": ("H", ("draw", cap_Ь)), "Э": ("C", ("draw", cap_Э)),
+    "Ю": ("H", ("draw", cap_Ю)), "Ё": ("E", ("draw", cap_Ё)),
+}
+
+# строчные среза T4a; полный набор — T4c
+LOWERCASE = {
     "о": ("o", ("copy", "o")),
     "а": ("a", ("copy", "a")),
     "р": ("p", ("copy", "p")),
     "г": ("r", ("copy", "r")),
     "в": ("n", ("small", "B")),
     "я": ("n", ("small_mirror", "R")),
-    "и": ("n", ("draw", draw_i)),
+    "и": ("n", ("draw_x", None)),
 }
+
+RECIPES = {**CAPITALS, **LOWERCASE}
 
 
 # --- сборка --------------------------------------------------------------
 
-def place(mask, ref_cell, outlined):
-    """Ячейка размера образца с маской на месте его заливки; контур для контурного шрифта."""
-    h, w = len(ref_cell), len(ref_cell[0])
+def place(drawn, ref, ref_cell, outlined):
+    """Глиф и ячейка: маска на месте заливки образца, поля ячейки как у образца;
+    ширина и высота растут по маске, advance (b) — на прирост ширины, baseline — на `above`."""
+    rh, rw = len(ref_cell), len(ref_cell[0])
     x0, y0, x1, y1 = ink_box(ref_cell)
-    if (x1 - x0, y1 - y0) != (len(mask[0]), len(mask)):
-        raise ValueError(f"mask {len(mask[0])}x{len(mask)} != ref ink {x1 - x0}x{y1 - y0}")
+    mask = drawn.mask
+    mh, mw = len(mask), len(mask[0])
+    if mh != (y1 - y0) + drawn.above + drawn.below:
+        raise ValueError(f"mask height {mh} != ref ink {y1 - y0} + {drawn.above} + {drawn.below}")
+    w = x0 + mw + (rw - x1)
+    h = y0 + mh + (rh - y1)
     cell = [[0] * w for _ in range(h)]
     for j, row in enumerate(mask):
         for i, v in enumerate(row):
@@ -135,28 +390,30 @@ def place(mask, ref_cell, outlined):
                         0 <= j + dj < h and 0 <= i + di < w and cell[j + dj][i + di] == INK
                         for dj in (-1, 0, 1) for di in (-1, 0, 1)):
                     cell[j][i] = OUTLINE
-    return cell
+    g = _copy.copy(ref)
+    g.b = ref.b + mw - (x1 - x0)
+    g.baseline = ref.baseline + drawn.above
+    return g, cell
 
 
-def build_glyph(ch, recipe, glyphs, cells, outlined):
+def build_glyph(ch, recipe, glyphs, cells, outlined, P):
     ref_ch, (how, arg) = recipe
-    ref = glyphs[ref_ch]
-    ref_cell = cells[ref_ch]
+    ref, ref_cell = glyphs[ref_ch], cells[ref_ch]
     if how == "copy":
         return glyphs[arg], [list(r) for r in cells[arg]]
     rx0, ry0, rx1, ry1 = ink_box(ref_cell)
-    w, h = rx1 - rx0, ry1 - ry0
     if how == "mirror":
-        mask = [r[::-1] for r in ink_mask(cells[arg])]
+        drawn = Drawn([r[::-1] for r in P.mask(arg)])
     elif how in ("small", "small_mirror"):
-        mask = shrink_rows(ink_mask(cells[arg]), h)
-        if how == "small_mirror":
-            mask = [r[::-1] for r in mask]
+        mask = shrink_rows(P.mask(arg), ry1 - ry0)
+        drawn = Drawn([r[::-1] for r in mask] if how == "small_mirror" else mask)
+    elif how == "draw_x":
+        drawn = Drawn(stems_diag(P, rx1 - rx0, ry1 - ry0))
     elif how == "draw":
-        mask = arg(w, h, stem_width(ink_mask(cells["H"])))
+        drawn = arg(P)
     else:
         raise ValueError(how)
-    return ref, place(mask, ref_cell, outlined)
+    return place(drawn, ref, ref_cell, outlined)
 
 
 def add_glyphs(f, a, recipes):
@@ -165,11 +422,12 @@ def add_glyphs(f, a, recipes):
     glyphs = {chr(g.char): g for g in f.glyphs}
     cells = {ch: cell_pixels(a, g) for ch, g in glyphs.items()}
     outlined = f.mode == 1
+    P = Metrics(cells)
     new = []
     for ch, recipe in recipes.items():
         if ch in glyphs:
             raise ValueError(f"{f.name} already has {ch!r}")
-        ref, cell = build_glyph(ch, recipe, glyphs, cells, outlined)
+        ref, cell = build_glyph(ch, recipe, glyphs, cells, outlined, P)
         new.append((ch, ref, cell))
     # раскладка полками: строка высотой с самую высокую ячейку
     gap, x, y, shelf = 1, 1, a.height + 1, 0

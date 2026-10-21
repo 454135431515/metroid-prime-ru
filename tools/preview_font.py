@@ -26,20 +26,21 @@ def render(f, a, text):
     glyphs = {g.char: g for g in f.glyphs}
     src = atlas_image(a)
     width = sum(glyphs[ord(c)].a + glyphs[ord(c)].b + glyphs[ord(c)].c for c in text if ord(c) in glyphs) + 8
-    img = Image.new("RGB", (max(width, 8), f.mono_h + 8), COLORS[0])
+    top = 4 + max([g.baseline - f.baseline for g in glyphs.values()] + [0])  # поле под Ё, Й
+    img = Image.new("RGB", (max(width, 8), f.mono_h + top + 8), COLORS[0])
     x, prev = 4, None
     for ch in text:
         g = glyphs.get(ord(ch))
         if g is None:
             x += f.mono_w // 2  # нет глифа: игра его просто пропускает; рисуем пробел-метку
-            ImageDraw.Draw(img).rectangle([x - f.mono_w // 2, 4, x - 2, 4 + f.mono_h], outline=(255, 0, 255))
+            ImageDraw.Draw(img).rectangle([x - f.mono_w // 2, top, x - 2, top + f.mono_h], outline=(255, 0, 255))
             prev = None
             continue
         if prev is not None:
             x += kern.get((prev.char, g.char), 0)
         cx, cy, cw, ch_ = font.cell_rect(g, a)
         cell = src.crop((cx, cy, cx + cw, cy + ch_))
-        img.paste(cell, (x + g.a, 4 + f.baseline - g.baseline))
+        img.paste(cell, (x + g.a, top + f.baseline - g.baseline))
         x += g.a + g.b + g.c
         prev = g
     return img
@@ -63,3 +64,19 @@ def main(font_path, txtr_dir, out, text="Metroid Prime: New Game"):
 
 if __name__ == "__main__":
     main(*sys.argv[1:])
+
+
+def sheet(font_dir, txtr_dir, fids, lines, out, scale=3):
+    """Строки `lines` каждым шрифтом из `fids`, столбиком, для сравнения кеглей."""
+    rows = []
+    for fid in fids:
+        f = font.parse_font(open(os.path.join(font_dir, f"{fid}.FONT"), "rb").read())
+        a = font.parse_txtr(open(os.path.join(txtr_dir, f"{f.texture_id:08X}.TXTR"), "rb").read())
+        rows += [render(f, a, line) for line in lines]
+    w, h = max(r.width for r in rows), sum(r.height for r in rows)
+    img = Image.new("RGB", (w, h), COLORS[0])
+    y = 0
+    for r in rows:
+        img.paste(r, (0, y))
+        y += r.height
+    img.resize((w * scale, h * scale), Image.NEAREST).save(out)
