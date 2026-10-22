@@ -52,7 +52,8 @@ def text_panes(data, full=False):
                     p += 1 + (2 if worker else 0)
                     tx, ty, tz = struct.unpack_from(">fff", data, p)
                     rot = struct.unpack_from(">9f", data, p + 12)
-                    turned = any(abs(v - (1.0 if i in (0, 4, 8) else 0.0)) > 1e-3 for i, v in enumerate(rot))
+                    # поворот — ненулевые недиагональные элементы; масштаб по осям (диагональ) — не поворот
+                    turned = any(abs(v) > 1e-3 for i, v in enumerate(rot) if i not in (0, 4, 8))
                     row += (parent, dim_x, dim_y, piv_x, piv_z, turned)
                 out.append(row)
         except (ValueError, struct.error):

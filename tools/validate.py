@@ -96,7 +96,7 @@ def load_panes(res, path):
         if name.startswith("_"):
             continue
         keys = set()
-        for spec in r["keys"]:
+        for spec in r.get("keys", []):
             keys |= set(grp[spec]) if spec.startswith("@") else set(expand(spec))
         boxes = []
         for want in r["panes"]:
@@ -128,6 +128,38 @@ def wrap(text, adv, limit):
 
 
 FONT_TAG = re.compile(r"&font=([0-9A-F]{8});")
+IMAGE_TAG = re.compile(r"&image=([^;]*);")
+IMAGE_FALLBACK_PX = 32  # значок с id из твиков игры (кнопки карты): размер текстуры неизвестен — допущение
+_TXTR_SIZES = {}
+
+
+def image_px(tag_args, res):
+    """Ширина значка &image= в пикселях шрифта: ширина текстуры (первой) × масштаб по X из тега.
+    SI,sx,sy,id / SA,fps,sx,sy,id… / A,fps,id… / id — как CTextParser."""
+    if not _TXTR_SIZES:
+        path = os.path.join(os.path.dirname(res), "txtr_sizes.tsv")
+        if os.path.isfile(path):
+            for line in open(path).read().splitlines()[1:]:
+                tid, w, _ = line.split("\t")
+                _TXTR_SIZES[tid] = int(w)
+    parts = [p.strip() for p in tag_args.split(",")]
+    kind, scale, ids = parts[0], 1.0, parts
+    if kind == "SI":
+        scale, ids = float(parts[1]), parts[3:]
+    elif kind == "SA":
+        scale, ids = float(parts[2]), parts[4:]
+    elif kind == "A":
+        ids = parts[2:]
+    tex = ids[0].upper() if ids else ""
+    return int(_TXTR_SIZES.get(tex, IMAGE_FALLBACK_PX) * scale)
+
+
+def text_px(text, adv, res):
+    """Ширина строки текста в пикселях шрифта: глифы + значки &image=; прочие теги не рисуются."""
+    total = 0
+    for m in IMAGE_TAG.finditer(text):
+        total += image_px(m.group(1), res)
+    return total + sum(adv.get(c, 0) for c in TAG.sub("", text))
 
 
 def layout_errors(rule, key, en, ru, english_of):
@@ -191,53 +223,88 @@ def overlap_errors(res, layout, ru, english_of, font_info):
             names[r["name"]] = r["id"]
     panes = frme.all_panes(res, full=True)
     grp = groups(res)
+    cfg = json.load(open(layout, encoding="utf-8"))
+    exclusive = {frozenset(x) for x in cfg.get("_exclusive", [])}
+    unverified = {frozenset(x) for x in cfg.get("_unverified", [])}
     per_pane = {}
     for rname, r in json.load(open(layout, encoding="utf-8")).items():
         if rname.startswith("_"):
             continue
         keys = []
         suffix = r.get("suffix", "")
-        for spec in r["keys"]:
+        for spec in r.get("keys", []):
             keys += grp[spec] if spec.startswith("@") else expand(spec)
-        en_txt = [english_of(k) + suffix for k in keys if english_of(k)]
-        ru_txt = [(ru.get(k.split(":")[0], {}).get(k.split(":")[1], {}).get("ru") or english_of(k) or "") + suffix
-                  for k in keys]
-        ru_txt = [t for t in ru_txt if t.strip()]
+        pairs = []  # (метка, английский, русский) — каждая строка со своим оригиналом
+        for k in keys:
+            en = english_of(k)
+            if not en:
+                continue
+            tr = ru.get(k.split(":")[0], {}).get(k.split(":")[1], {}).get("ru") or en
+            pairs.append((k, en + suffix, tr + suffix))
+        pairs += [(t, t, t) for t in r.get("text", [])]
+        # непереведённая строка (русский = английский) — временное состояние: её наложения не ошибка
+        pairs = [(k, e, t) if t != e or k in r.get("text", []) else (k + "~", e, t) for k, e, t in pairs]
         for want in r["panes"]:
             frame, _, pane = want.rpartition("/")
             for (fid, pname) in panes:
                 if pane == pname and (not frame or names.get(frame) == fid):
-                    slot = per_pane.setdefault((fid, pname), ([], [], r.get("font")))
-                    slot[0].extend(en_txt)
-                    slot[1].extend(ru_txt)
-    worlds, boxes = {}, {}
-    for (fid, pname), (en_txt, ru_txt, font_override) in per_pane.items():
+                    slot = per_pane.setdefault((fid, pname), ([], r.get("font"), r.get("scroll", False)))
+                    slot[0].extend(pairs)
+    worlds, boxes, px_world = {}, {}, {}
+    for (fid, pname), (pairs, font_override, scroll) in per_pane.items():
         if fid not in worlds:
             worlds[fid] = frme.world_transforms(open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read())
         pane = panes[(fid, pname)]
         if pane[-1]:
             continue  # повёрнуто в 3D (боковые панели паузы): плоская проекция неверна, не проверяется
         adv, line_h = font_info(font_override or pane[0])
-        width = lambda t: max(sum(adv.get(c, 0) for c in ln) for ln in TAG.sub("", t).split("\n"))
-        if not en_txt or not ru_txt:
-            continue
-        en_w, ru_w = max(map(width, en_txt)), max(map(width, ru_txt))
-        en_n = max(t.count("\n") + 1 for t in en_txt)
-        ru_n = max(t.count("\n") + 1 for t in ru_txt)
-        ru_long = max(ru_txt, key=width)
-        boxes[(fid, pname)] = (frme.text_box(worlds[fid][pname], pane, en_w, en_n, line_h),
-                               frme.text_box(worlds[fid][pname], pane, ru_w, ru_n, line_h), ru_long)
-    exclusive = {frozenset(x) for x in json.load(open(layout, encoding="utf-8")).get("_exclusive", [])}
-    hit = lambda a, b: a[0] < b[1] and b[0] < a[1] and a[2] < b[3] and b[2] < a[3]
-    errs = []
+        wrapping, ex = pane[1], pane[3]
+
+        def lines_of(t):
+            if wrapping:
+                plain = IMAGE_TAG.sub("\u25a0", t)  # значок — как один широкий знак при переносе
+                out = []
+                for para in TAG.sub("", plain).split("\n"):
+                    out += wrap(para, adv, ex) if para else [""]
+                return out
+            return t.split("\n")
+
+        def box(t):
+            ls = lines_of(t)
+            w = max(text_px(ln, adv, res) if not wrapping else
+                    sum(adv.get(c, 0) for c in ln) + ln.count("\u25a0") * IMAGE_FALLBACK_PX for ln in ls)
+            if scroll:  # прокрутка: видно не больше окна поля
+                return frme.text_box(worlds[fid][pname], pane, w)
+            return frme.text_box(worlds[fid][pname], pane, w, len(ls), line_h)
+
+        boxes[(fid, pname)] = [(k, box(e), box(t), t) for k, e, t in pairs]
+        px_world[(fid, pname)] = (pane[6] / pane[3] * abs(worlds[fid][pname][0][0]),
+                                  pane[7] / pane[4] * abs(worlds[fid][pname][2][2]))
+    TOUCH_PX = 2  # касание (≤ 2 px шрифта) — не наложение: точность модели ~ пиксель
+
+    def hit(a, b, eps_x, eps_z):
+        return (min(a[1], b[1]) - max(a[0], b[0]) > eps_x and
+                min(a[3], b[3]) - max(a[2], b[2]) > eps_z)
+    errs, todo = [], []
     items = sorted(boxes.items())
-    for i, ((fa, na), (ea, ra, ta)) in enumerate(items):
-        for (fb, nb), (eb, rb, tb) in items[i + 1:]:
+    for i, ((fa, na), la) in enumerate(items):
+        for (fb, nb), lb in items[i + 1:]:
             if fa != fb or na.rstrip("b") == nb.rstrip("b") or frozenset((na, nb)) in exclusive:
                 continue
-            if hit(ra, rb) and not hit(ea, eb):
-                errs.append(f"наложение текста в кадре {fa}: {na} {ta!r} и {nb} {tb!r}")
-    return errs
+            ex_ = TOUCH_PX * min(px_world[(fa, na)][0], px_world[(fb, nb)][0])
+            ez_ = TOUCH_PX * min(px_world[(fa, na)][1], px_world[(fb, nb)][1])
+            bad = [(ka, ta, kb, tb) for ka, ea, ra, ta in la for kb, eb, rb, tb in lb
+                   if hit(ra, rb, ex_, ez_) and not hit(ea, eb, ex_, ez_)]
+            untranslated = [x for x in bad if x[0].endswith("~") or x[2].endswith("~")]
+            todo += [f"наложение с непереведённой строкой в кадре {fa}: {na} [{ka}] и {nb} [{kb}]"
+                     for ka, _, kb, _ in untranslated]
+            bad = [x for x in bad if x not in untranslated]
+            sink = todo if frozenset((na, nb)) in unverified else errs
+            for ka, ta, kb, tb in bad[:3]:
+                sink.append(f"наложение текста в кадре {fa}: {na} [{ka}] {ta!r} и {nb} [{kb}] {tb!r}")
+            if len(bad) > 3:
+                sink.append(f"наложение текста в кадре {fa}: {na} и {nb} — ещё {len(bad) - 3}")
+    return errs, todo
 
 
 def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
@@ -290,7 +357,9 @@ def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
             if en.count("\n") != text.count("\n") and not in_layout:
                 warnings.append(f"{key}: переносов {text.count(chr(10))}, в английском {en.count(chr(10))}")
     if rules:
-        errors += overlap_errors(res, layout, ru, english_of, rules[0][6])
+        o_err, o_todo = overlap_errors(res, layout, ru, english_of, rules[0][6])
+        errors += o_err
+        todo += [f"overlap: {t}" for t in o_todo]
     if os.path.isfile(constraints):
         m = RATCHET.search(open(constraints, encoding="utf-8").read())
         if m and count < int(m.group(1)):

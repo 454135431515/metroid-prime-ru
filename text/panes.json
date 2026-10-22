@@ -16,9 +16,69 @@
   [
    "TextPane_BeamMenu",
    "TextPane_VisorMenu"
+  ],
+  [
+   "textpane_instructions",
+   "textpane_hint"
+  ],
+  [
+   "textpane_instructions1",
+   "textpane_hint"
+  ],
+  [
+   "textpane_instructions2",
+   "textpane_hint"
+  ],
+  [
+   "textpane_instructions",
+   "textpane_right"
+  ],
+  [
+   "textpane_instructions1",
+   "textpane_right"
+  ],
+  [
+   "textpane_instructions2",
+   "textpane_right"
+  ],
+  [
+   "textpane_instructions",
+   "textpane_right1"
+  ],
+  [
+   "textpane_instructions1",
+   "textpane_right1"
+  ],
+  [
+   "textpane_instructions2",
+   "textpane_right1"
+  ],
+  [
+   "textpane_double0",
+   "textpane_triple0"
+  ],
+  [
+   "textpane_double0",
+   "textpane_triple1"
+  ],
+  [
+   "textpane_double0",
+   "textpane_triple2"
+  ],
+  [
+   "textpane_double1",
+   "textpane_triple0"
+  ],
+  [
+   "textpane_double1",
+   "textpane_triple1"
+  ],
+  [
+   "textpane_double1",
+   "textpane_triple2"
   ]
  ],
- "_exclusive_note": "Пары полей, которые не видны одновременно: строка выбора режима выводится вместо строки своего слота (в FRME стоит на месте слота 0; соседние слоты 1–2 видны и проверяются, скриншот T8.2); подписи меню лучей и забрал появляются только при открытом своём меню (CHudVisorBeamMenu, проверить).",
+ "_exclusive_note": "Пары полей, которые не видны одновременно: строка выбора режима выводится вместо строки своего слота (в FRME стоит на месте слота 0; соседние слоты 1–2 видны и проверяются, скриншот T8.2); подписи меню лучей и забрал появляются только при открытом своём меню (CHudVisorBeamMenu, проверить). Подсказка карты и подписи «Вращать/Двигать/Масштаб» — либо то, либо другое (CAutoMapper.cpp 641); подписи не видны вместе со значком A и «Картой мира» (скриншот карты T8.1). Переключатели на 2 и 3 значения — одно из двух (CPauseScreenFrame).",
  "boss": {
   "panes": [
    "textpane_boss"
@@ -313,27 +373,6 @@
   "max": 117,
   "note": "CPauseScreen.cpp GetString(6..8); max: «СНАРЯЖЕНИЕ» на нижней панели, скриншот T8.1"
  },
- "pause-on-off": {
-  "panes": [
-   "FRME_PauseScreen/textpane_double0",
-   "FRME_PauseScreen/textpane_double1"
-  ],
-  "keys": [
-   "500EC6A0:94-95"
-  ],
-  "note": "CPauseScreenFrame.cpp"
- },
- "pause-sound-mode": {
-  "panes": [
-   "FRME_PauseScreen/textpane_triple0",
-   "FRME_PauseScreen/textpane_triple1",
-   "FRME_PauseScreen/textpane_triple2"
-  ],
-  "keys": [
-   "500EC6A0:96-98"
-  ],
-  "note": "CPauseScreenFrame.cpp"
- },
  "pause-zoom": {
   "panes": [
    "FRME_PauseScreen/textpane_ytext"
@@ -436,19 +475,6 @@
   ],
   "note": "CPauseScreenFrame.cpp 1142/1163: разделы и пункты настроек"
  },
- "options-front-end-values": {
-  "panes": [
-   "FRME_OptionsFrontEnd/textpane_double0",
-   "FRME_OptionsFrontEnd/textpane_double1",
-   "FRME_OptionsFrontEnd/textpane_triple0",
-   "FRME_OptionsFrontEnd/textpane_triple1",
-   "FRME_OptionsFrontEnd/textpane_triple2"
-  ],
-  "keys": [
-   "500EC6A0:94-98"
-  ],
-  "note": "CPauseScreenFrame.cpp 1125-1129"
- },
  "options-front-end-title": {
   "panes": [
    "FRME_OptionsFrontEnd/textpane_title"
@@ -536,7 +562,7 @@
   ],
   "note": "CFrontEndUI.cpp: связь с GBA"
  },
- "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message (CMessageScreen — таблицы сообщений, привязать с регионами), FRME_MapScreen areaname/hint (названия комнат и подсказки зон — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
+ "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message (CMessageScreen — таблицы сообщений, привязать с регионами), FRME_MapScreen areaname (названия комнат — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
  "file-select-new": {
   "panes": [
    "textpane_filename0",
@@ -549,5 +575,306 @@
   ],
   "note": "CFrontEndUI.cpp поле 0 пустого слота: 0x24, без процента"
  },
- "_overlap_note": "Проверка наложения не видит повёрнутые в 3D поля (69 из 189, боковые панели паузы): для них только ширина/строки и скриншоты."
+ "_overlap_note": "Проверка наложения не видит повёрнутые в 3D поля (69 из 189, боковые панели паузы): для них только ширина/строки и скриншоты.",
+ "map-hint": {
+  "panes": [
+   "FRME_MapScreen/textpane_hint"
+  ],
+  "keys": [
+   "@hints"
+  ],
+  "note": "CAutoMapper.cpp 660: подсказка зоны — строка 0 таблицы подсказки (те же таблицы, что HUD-подсказки); скриншот T8.2 — наложение на «Карта планеты»; max 360: место между «Выход» (до −12,44) и значком A (с 11,04) при масштабе 0,0599 — по центру не больше ~2×11/0,06; «Зафиксирована сейсмическая активность.» (418) на скриншоте касается обоих",
+  "max": 360
+ },
+ "map-right": {
+  "panes": [
+   "FRME_MapScreen/textpane_right"
+  ],
+  "keys": [
+   "0552A456:44-45"
+  ],
+  "note": "CAutoMapper.cpp 0x2c 0x2d"
+ },
+ "map-a-button": {
+  "panes": [
+   "FRME_MapScreen/textpane_right1"
+  ],
+  "text": [
+   "&image=00000000;"
+  ],
+  "note": "CAutoMapper.cpp 1465-1481: значок кнопки A (id из твиков, масштаб 1); ширина — допущение 32 px (IMAGE_FALLBACK_PX)"
+ },
+ "_unverified": [
+  [
+   "textpane_double0",
+   "textpane_right0"
+  ],
+  [
+   "textpane_double0",
+   "textpane_right1"
+  ],
+  [
+   "textpane_double0",
+   "textpane_right2"
+  ],
+  [
+   "textpane_double0",
+   "textpane_right3"
+  ],
+  [
+   "textpane_double0",
+   "textpane_right4"
+  ],
+  [
+   "textpane_double0",
+   "textpane_filename0"
+  ],
+  [
+   "textpane_double0",
+   "textpane_filename1"
+  ],
+  [
+   "textpane_double0",
+   "textpane_filename2"
+  ],
+  [
+   "textpane_double0",
+   "textpane_filename3"
+  ],
+  [
+   "textpane_double1",
+   "textpane_right0"
+  ],
+  [
+   "textpane_double1",
+   "textpane_right1"
+  ],
+  [
+   "textpane_double1",
+   "textpane_right2"
+  ],
+  [
+   "textpane_double1",
+   "textpane_right3"
+  ],
+  [
+   "textpane_double1",
+   "textpane_right4"
+  ],
+  [
+   "textpane_double1",
+   "textpane_filename0"
+  ],
+  [
+   "textpane_double1",
+   "textpane_filename1"
+  ],
+  [
+   "textpane_double1",
+   "textpane_filename2"
+  ],
+  [
+   "textpane_double1",
+   "textpane_filename3"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_right0"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_right1"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_right2"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_right3"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_right4"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_filename0"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_filename1"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_filename2"
+  ],
+  [
+   "textpane_triple0",
+   "textpane_filename3"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_right0"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_right1"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_right2"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_right3"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_right4"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_filename0"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_filename1"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_filename2"
+  ],
+  [
+   "textpane_triple1",
+   "textpane_filename3"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_right0"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_right1"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_right2"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_right3"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_right4"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_filename0"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_filename1"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_filename2"
+  ],
+  [
+   "textpane_triple2",
+   "textpane_filename3"
+  ]
+ ],
+ "_unverified_note": "Пары, где по FRME не видно, окажутся ли поля рядом во время игры (значения настроек главного экрана двигаются с выбранным пунктом): наложение — «проверить в игре», не ошибка.",
+ "pause-double0": {
+  "panes": [
+   "FRME_PauseScreen/textpane_double0"
+  ],
+  "keys": [
+   "500EC6A0:95"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "pause-double1": {
+  "panes": [
+   "FRME_PauseScreen/textpane_double1"
+  ],
+  "keys": [
+   "500EC6A0:94"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "pause-triple0": {
+  "panes": [
+   "FRME_PauseScreen/textpane_triple0"
+  ],
+  "keys": [
+   "500EC6A0:96"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "pause-triple1": {
+  "panes": [
+   "FRME_PauseScreen/textpane_triple1"
+  ],
+  "keys": [
+   "500EC6A0:97"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "pause-triple2": {
+  "panes": [
+   "FRME_PauseScreen/textpane_triple2"
+  ],
+  "keys": [
+   "500EC6A0:98"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "fe-double0": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_double0"
+  ],
+  "keys": [
+   "500EC6A0:95"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "fe-double1": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_double1"
+  ],
+  "keys": [
+   "500EC6A0:94"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "fe-triple0": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_triple0"
+  ],
+  "keys": [
+   "500EC6A0:96"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "fe-triple1": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_triple1"
+  ],
+  "keys": [
+   "500EC6A0:97"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "fe-triple2": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_triple2"
+  ],
+  "keys": [
+   "500EC6A0:98"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ }
 }
