@@ -98,6 +98,8 @@ def load_panes(res, path):
         keys = set()
         for spec in r.get("keys", []):
             keys |= set(grp[spec]) if spec.startswith("@") else set(expand(spec))
+        for spec in r.get("exclude", []):
+            keys -= set(expand(spec))
         boxes = []
         for want in r["panes"]:
             frame, _, pane = want.rpartition("/")
@@ -180,9 +182,10 @@ def layout_errors(rule, key, en, ru, english_of):
         if wrapping:
             lines = wrap(plain_ru, adv, ex)
             wide = [ln for ln in lines if width(ln) > ex]
-            # допуск: наибольшее число строк оригинала в этом поле — так поле задумано
-            en_lines = max([len(wrap(plain_en, adv, ex))] +
-                           [len(wrap(TAG.sub("", english_of(k) or ""), adv, ex)) for k in keys])
+            # допуск без замера: наибольшее число строк оригинала в этом поле — так поле задумано;
+            # при замеренном пределе — только эта же строка оригинала (перевод не хуже оригинала)
+            en_this = len(wrap(plain_en, adv, ex))
+            en_lines = max([en_this] + [len(wrap(TAG.sub("", english_of(k) or ""), adv, ex)) for k in keys])
             if len(lines) > 1 and lines[-1].strip() and sum(c.isalnum() for c in lines[-1]) < 3:
                 errs.append(f"висячая строка в поле {name}: {lines}")
             if wide:
@@ -192,8 +195,8 @@ def layout_errors(rule, key, en, ru, english_of):
                             f"{[(ln, width(ln)) for ln in lines if width(ln) > max_px]}")
             elif scroll:
                 pass
-            elif max_lines and len(lines) > max(max_lines, en_lines):
-                errs.append(f"{len(lines)} строк в поле {name}, замерено {max_lines} (оригинал {en_lines}): {lines}")
+            elif max_lines and len(lines) > max(max_lines, en_this):
+                errs.append(f"{len(lines)} строк в поле {name}, замерено {max_lines} (оригинал {en_this}): {lines}")
             elif seen_lines and len(lines) > max(seen_lines, en_lines):
                 todo.append(f"{name}: {len(lines)} строк, чисто видели {seen_lines}: {lines}")
             elif not max_lines and not seen_lines and len(lines) > en_lines:
@@ -243,6 +246,8 @@ def overlap_errors(res, layout, ru, english_of, font_info):
         suffix = r.get("suffix", "")
         for spec in r.get("keys", []):
             keys += grp[spec] if spec.startswith("@") else expand(spec)
+        drop = {k for spec in r.get("exclude", []) for k in expand(spec)}
+        keys = [k for k in keys if k not in drop]
         pairs = []  # (метка, английский, русский) — каждая строка со своим оригиналом
         for k in keys:
             en = english_of(k)
