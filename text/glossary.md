@@ -251,6 +251,32 @@
 | Wild | Дикая природа | своё |
 | World | Мир | своё |
 
+## Фрегат пиратов: комнаты и служебные слова сканов (T8.3a)
+
+| EN | RU | Источник |
+|---|---|---|
+| Morphology / Status / Info / Species / Subject | Морфология / Состояние / Сведения / Вид / Объект | своё |
+| Native of Tallon IV | Обитатель Таллона IV | своё |
+| Phazon Batch / Mutagen Tank | Партия Фазона / Мутагенный резервуар | своё |
+| Specimen Cell / Specimen Solitary Holding | Камера образца / Изолятор образцов | своё |
+| Phazon level >> X | Фазон >> уровень X | своё (вмещается в строку окна скана) |
+| Escape Pod N (в списке запусков) | Капсула N | своё |
+| Phazon Infusion Stage N | Внедрение Фазона, стадия N | своё |
+| Perimeter Defense Turret / Auto Defense Turret | Турель защиты периметра / Автоматическая оборонительная турель | своё |
+| Deck Alpha / Beta / Gamma | палуба «Альфа» / «Бета» / «Гамма» | своё |
+| Emergency Evacuation Area | Отсек аварийной эвакуации | вики |
+| Biohazard Containment | Склад биологически опасных материалов | вики |
+| Biotech Research Area 1 | Отсек исследования биотехнологий 1 | вики (регистр) |
+| Map Facility | Отдел картографии | вики |
+| Exterior Docking Hangar | Внешний посадочный ангар | вики |
+| Deck Beta Conduit / Security / Transit Hall | Кабельный зал / Зал охраны / Транзитный зал палубы «Бета» | своё |
+| Deck Alpha Access / Umbilical Hall | Входной зал / Зал пуповины палубы «Альфа» | своё |
+| Deck Gamma Monitor Hall | Зал наблюдения палубы «Гамма» | своё |
+| Air Lock / Connection Elevator / Cargo Freight Lift | Шлюз / Соединительный лифт / Грузовой лифт | своё |
+| Main Docking Bay / Reactor Core Entrance | Главный стыковочный отсек / Преддверие ядра реактора | своё |
+| Orpheon / Siriacus / Vol Paragom / Vortex Outpost | «Орфеон» / «Сириакус» / «Вол Парагом» / аванпост «Вортекс» | вики / своё |
+| Entrance to X | Вход в X (во Входной…, во Внешний…) | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |

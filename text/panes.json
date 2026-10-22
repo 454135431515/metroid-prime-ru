@@ -479,7 +479,8 @@
   "keys": [
    "@scan-short"
   ],
-  "note": "CScanDisplay.cpp 283: строка 0 скана"
+  "note": "CScanDisplay.cpp 283: строка 0 скана; seen_lines 4: скан осы (оригинал) в 4 строки стоит чисто (скриншот T8.3a)",
+  "seen_lines": 4
  },
  "scan-long": {
   "panes": [
