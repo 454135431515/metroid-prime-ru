@@ -166,8 +166,8 @@ def text_box(world, pane, text_px, lines=1, line_px=0):
     return min(xs), max(xs), min(zs), max(zs)
 
 
-def set_pane_font(data, pane, font_id):
-    """Копия кадра, где у текстового поля `pane` другой шрифт (4 байта fontId); остальное без изменений."""
+def font_offset(data, pane):
+    """Смещение fontId текстового поля `pane` в кадре."""
     pos = 0
     while True:
         pos = data.find(b"TXPN", pos)
@@ -177,8 +177,16 @@ def set_pane_font(data, pane, font_id):
             name, p = cstr(data, pos + 4)
             if name == pane:
                 _, p = cstr(data, p)
-                p += 4 + 16 + 4 + 8 + 12
-                return data[:p] + struct.pack(">I", font_id) + data[p + 4:]
+                return p + 4 + 16 + 4 + 8 + 12
         except ValueError:
             pass
         pos += 4
+
+
+def squeeze_pane(data, pane, factor):
+    """Копия кадра, где область вёрстки поля `pane` шире в `factor` раз (extentX, целое): игра рисует
+    текст с масштабом dimX / extentX только по ширине (CGuiTextPane::Draw: Scale(width, 1, height)) —
+    буквы уже, в строку входит больше. Возвращает (кадр, новый extentX)."""
+    p = font_offset(data, pane) + 4 + 1 + 1 + 4 + 4 + 16 + 16
+    ex = round(struct.unpack_from(">f", data, p)[0] * factor)
+    return data[:p] + struct.pack(">f", float(ex)) + data[p + 4:], ex

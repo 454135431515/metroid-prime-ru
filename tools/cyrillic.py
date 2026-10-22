@@ -581,65 +581,6 @@ def add_glyphs(f, a, recipes):
     f.glyphs.sort(key=lambda g: g.char)
 
 
-NARROW_FONT, NARROW_TXTR = 0x52550001, 0x52550002  # нет ни в одном PAK диска (проверено по всем id)
-NARROW_BASE = "B5BC844E"
-
-
-def narrow_cell(cell):
-    """Ячейка на 1 колонку уже: из самой длинной серии одинаковых соседних колонок внутри буквы
-    (не крайних) убирается одна — сужаются просветы и перекладины, стемы остаются прежними.
-    None, если таких колонок нет."""
-    w = len(cell[0])
-    cols = [tuple(row[i] for row in cell) for i in range(w)]
-    best, start = 1, None
-    i = 1
-    while i < w - 1:
-        k = i
-        while k + 1 < w - 1 and cols[k + 1] == cols[i]:
-            k += 1
-        if k - i + 1 > best:
-            best, start = k - i + 1, i
-        i = k + 1
-    if start is None:
-        return None
-    drop = start + best // 2
-    return [row[:drop] + row[drop + 1:] for row in cell]
-
-
-def narrow_font(f, a):
-    """Сжатая копия шрифта `f` с атласом `a` (новые id): каждый глиф по возможности на 1 px уже,
-    advance уменьшается на столько же. Атлас собирается заново полками, высота — степень двойки."""
-    f2 = _copy.deepcopy(f)
-    f2.name = f.name + "_Narrow"
-    f2.texture_id = NARROW_TXTR
-    cells = []
-    for g in f2.glyphs:
-        cell = cell_pixels(a, g)
-        if g.cell_w > 2:
-            n = narrow_cell(cell)
-            if n is not None:
-                cell = n
-                g.b -= 1
-        cells.append(cell)
-    gap, x, y, shelf, spots = 1, 1, 1, 0, []
-    for cell in cells:
-        h, w = len(cell), len(cell[0])
-        if x + w + gap > a.width:
-            x, y, shelf = 1, y + shelf + gap, 0
-        spots.append((x, y))
-        x += w + gap
-        shelf = max(shelf, h)
-    height = 1 << (y + shelf + gap - 1).bit_length()
-    a2 = font.Atlas(a.width, height, a.palette_format, list(a.palette), bytearray(a.width * height), a.tail)
-    for g, cell, (x, y) in zip(f2.glyphs, cells, spots):
-        for j, row in enumerate(cell):
-            for i, v in enumerate(row):
-                a2.pixels[(y + j) * a2.width + x + i] = v
-        g.cell_w, g.cell_h = len(cell[0]), len(cell)
-        font.set_cell_uv(g, a2, x, y)
-    return f2, a2
-
-
 def main(res, out):
     os.makedirs(out, exist_ok=True)
     for fid in FONTS:
@@ -650,11 +591,6 @@ def main(res, out):
         open(os.path.join(out, f"{fid}.FONT"), "wb").write(font.build_font(f))
         open(os.path.join(out, f"{f.texture_id:08X}.TXTR"), "wb").write(font.build_txtr(a))
         print(f"{fid} {f.name}: +{len(RECIPES)} glyphs, atlas {a.width}x{a.height}")
-        if fid == NARROW_BASE:
-            f2, a2 = narrow_font(f, a)
-            open(os.path.join(out, f"{NARROW_FONT:08X}.FONT"), "wb").write(font.build_font(f2))
-            open(os.path.join(out, f"{NARROW_TXTR:08X}.TXTR"), "wb").write(font.build_txtr(a2))
-            print(f"{NARROW_FONT:08X} {f2.name}: узкая копия, atlas {a2.width}x{a2.height}")
 
 
 if __name__ == "__main__":

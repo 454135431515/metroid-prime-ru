@@ -73,6 +73,13 @@ def groups(res):
 MLVL_NAMES = {"F7AB6449", "42C9296F", "1A626AAC", "973EEE29", "BB4E31F0", "4A2E3969", "03166AF8"}
 
 
+def squeezed(font_id, ex, factor):
+    """Ключ font_info для поля, сжатого frme.squeeze_pane: тот же округлённый extentX, что пишет сборка."""
+    if not factor:
+        return font_id
+    return f"{font_id}*{round(ex * factor) / ex}"
+
+
 def load_panes(res, path):
     """[(имя правила, ключи, [(advance, ширина, перенос, строк в высоту, шрифт)], max, scroll)]."""
     import csv
@@ -89,9 +96,12 @@ def load_panes(res, path):
     fonts = {}
 
     def font_info(fid):
+        """fid — id шрифта или «id*k»: поле сжато по ширине в k раз (squeeze), ширины букв / k."""
         if fid not in fonts:
-            f = font.parse_font(open(os.path.join(cyrillic_res(res), "FONT", f"{fid}.FONT"), "rb").read())
-            fonts[fid] = ({chr(g.char): g.a + g.b + g.c for g in f.glyphs}, f.mono_h + f.line_margin)
+            base, _, k = fid.partition("*")
+            f = font.parse_font(open(os.path.join(cyrillic_res(res), "FONT", f"{base}.FONT"), "rb").read())
+            fonts[fid] = ({chr(g.char): (g.a + g.b + g.c) / float(k or 1) for g in f.glyphs},
+                          f.mono_h + f.line_margin)
         return fonts[fid]
 
     grp = groups(res)
@@ -109,7 +119,7 @@ def load_panes(res, path):
             frame, _, pane = want.rpartition("/")
             for (fid, pname), (font_id, wrap, _, ex, ey) in panes.items():
                 if pname == pane and (not frame or names.get(fid) == frame):
-                    boxes.append((r.get("font", font_id), wrap, ex, ey))
+                    boxes.append((squeezed(font_id, ex, r.get("squeeze")), wrap, ex, ey))
         if not boxes:
             raise ValueError(f"panes.json {name}: поле {r['panes']} не найдено в FRME")
         rules.append((name, keys, sorted(set(boxes)), r.get("max"), r.get("lines"), r.get("scroll", False), font_info,
@@ -266,16 +276,16 @@ def overlap_errors(res, layout, ru, english_of, font_info):
             frame, _, pane = want.rpartition("/")
             for (fid, pname) in panes:
                 if pane == pname and (not frame or names.get(frame) == fid):
-                    slot = per_pane.setdefault((fid, pname), ([], r.get("font"), r.get("scroll", False)))
+                    slot = per_pane.setdefault((fid, pname), ([], r.get("squeeze"), r.get("scroll", False)))
                     slot[0].extend(pairs)
     worlds, boxes, px_world = {}, {}, {}
-    for (fid, pname), (pairs, font_override, scroll) in per_pane.items():
+    for (fid, pname), (pairs, squeeze, scroll) in per_pane.items():
         if fid not in worlds:
             worlds[fid] = frme.world_transforms(open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read())
         pane = panes[(fid, pname)]
         if pane[-1]:
             continue  # повёрнуто в 3D (боковые панели паузы): плоская проекция неверна, не проверяется
-        adv, line_h = font_info(font_override or pane[0])
+        adv, line_h = font_info(squeezed(pane[0], pane[3], squeeze))
         wrapping, ex = pane[1], pane[3]
 
         def lines_of(t):
