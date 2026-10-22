@@ -43,15 +43,13 @@ def expand(spec):
 
 def groups(res):
     """@pickups — окна подбора (CScriptHUDMemo), @hints — подсказки «…обнаружено»,
-    @worlds — названия регионов (имя MLVL: строка слота, CFrontEndUI), @scan-short / @scan-long —
+    @worlds — названия регионов (строка 0 таблиц MLVL_NAMES: слот сохранения, CFrontEndUI), @scan-short / @scan-long —
     строка 0 и 2 таблиц сканов (CScanDisplay: короткий текст и прокрутка)."""
     out = {"@pickups": [], "@hints": [], "@worlds": [], "@scan-short": [], "@scan-long": []}
     scans = set()
     scan_tsv = os.path.join(os.path.dirname(res), "scans.tsv")
     if os.path.isfile(scan_tsv):
         scans = {line.split("\t")[1] for line in open(scan_tsv).read().splitlines()[1:]}
-    regions = {"Space Pirate Frigate", "Tallon Overworld", "Chozo Ruins", "Phendrana Drifts", "Phazon Mines",
-               "Magmoor Caverns", "Impact Crater", "Frigate Orpheon"}
     for path in glob.glob(os.path.join(res, "STRG", "*.STRG")):
         sid = os.path.basename(path)[:8]
         strings = dict(strg.parse(open(path, "rb").read()))["ENGL"]
@@ -60,13 +58,19 @@ def groups(res):
             out["@scan-short"].append(f"{sid}:0")
             if len(strings) > 2:
                 out["@scan-long"].append(f"{sid}:2")
-        if len(strings) == 1 and strings[0].strip() in regions:
+        if sid in MLVL_NAMES:
             out["@worlds"].append(f"{sid}:0")
         if strings[0].startswith("&font=B7BBD0B4;") and "acquired" in strings[0]:
             out["@pickups"] += keys
         elif sid != "0552A456" and all(x.startswith("&just=center;") for x in strings):
             out["@hints"] += keys
     return out
+
+
+# Имена миров: поле «имя STRG» в заголовке MLVL каждого Metroid*.pak (USA 1.00). Слот сохранения
+# выводит строку 0. Раньше группа строилась по «однострочной таблице с именем региона» — она брала
+# 44BA9061 (не имя мира) и пропускала настоящее имя Таллона 42C9296F (две строки).
+MLVL_NAMES = {"F7AB6449", "42C9296F", "1A626AAC", "973EEE29", "BB4E31F0", "4A2E3969", "03166AF8"}
 
 
 def load_panes(res, path):
