@@ -327,7 +327,7 @@
 | North / East Atrium / Antechamber / Ruins Entrance | Северный / Восточный атриум / Преддверие / Вход в Руины | своё |
 | Save Station N / Map Station / Missile Station | Станция сохранения N / Картографическая станция / Ракетная станция | вики |
 | Mechanoid: / Aberration: / Species: | Механоид: / Аномалия: / Вид: | своё (Species — как Morphology, решение владельца) |
-| 121° centigrade | 121 градуса (знака «°» нет в шрифте) | своё |
+| 121° centigrade | 121 °C («°» дорисован в T4e) | своё |
 
 ## Материалы (T8.2)
 
