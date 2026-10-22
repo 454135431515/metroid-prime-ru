@@ -255,7 +255,8 @@
 
 | EN | RU | Источник |
 |---|---|---|
-| Morphology / Status / Info / Species / Subject | Морфология / Состояние / Сведения / Вид / Объект | своё |
+| Morphology / Species | Вид (решение владельца: «Морфология: Космический пират» не влезает в строку окна скана) | своё |
+| Status / Info / Subject | Состояние / Сведения / Объект | своё |
 | Native of Tallon IV | Обитатель Таллона IV | своё |
 | Phazon Batch / Mutagen Tank | Партия Фазона / Мутагенный резервуар | своё |
 | Specimen Cell / Specimen Solitary Holding | Камера образца / Изолятор образцов | своё |
