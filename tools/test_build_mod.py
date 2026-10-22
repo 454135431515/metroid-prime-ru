@@ -36,6 +36,21 @@ def main(work):
         assert stale == 1
         assert built[36] == "[Новая игра]" and built[22] == english[22]
         assert [s for i, s in enumerate(built) if i != 36] == [s for i, s in enumerate(english) if i != 36]
+        # кадры с узким шрифтом поля босса: от диска отличаются ровно ссылкой на шрифт (4 байта)
+        import cyrillic
+        import font
+        frames = [n[:8] for n in os.listdir(out) if n.endswith(".FRME")]
+        assert frames, "нет кадров с полем босса"
+        for fid in frames:
+            a = open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read()
+            b = open(os.path.join(out, f"{fid}.FRME"), "rb").read()
+            assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4, fid
+        nf = font.parse_font(open(os.path.join(out, f"{cyrillic.NARROW_FONT:08X}.FONT"), "rb").read())
+        base = font.parse_font(open(os.path.join(out, f"{cyrillic.NARROW_BASE}.FONT"), "rb").read())
+        adv = lambda f: {g.char: g.a + g.b + g.c for g in f.glyphs}
+        na, ba = adv(nf), adv(base)
+        assert set(na) == set(ba) and all(na[c] <= ba[c] for c in na), "узкий шрифт шире обычного"
+        assert nf.texture_id == cyrillic.NARROW_TXTR
     print("build_mod: ok")
     return 0
 

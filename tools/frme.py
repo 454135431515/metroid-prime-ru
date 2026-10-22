@@ -152,14 +152,32 @@ def apply(m, x, z):
 
 def text_box(world, pane, text_px, lines=1, line_px=0):
     """Мировой прямоугольник (x0, x1, z0, z1), который займёт текст шириной text_px пикселей шрифта.
-    pane — значение all_panes(full=True). По вертикали — высота поля, а если строк больше одной —
-    lines * line_px пикселей, по центру поля (так ведёт себя рамка босса: две строки ушли вверх и вниз)."""
+    pane — значение all_panes(full=True). По вертикали — lines * line_px пикселей шрифта по центру поля
+    (так ведёт себя рамка босса: две строки ушли вверх и вниз); без line_px — высота поля."""
     _, _, just, ex, ey, _, dim_x, dim_y, piv_x, piv_z, _ = pane
     sx = dim_x / ex
     w = text_px * sx
     left = piv_x - dim_x / 2
     x0 = {0: left, 1: piv_x - w / 2, 2: left + dim_x - w}[just]
-    h = max(dim_y, lines * line_px * dim_y / ey) if lines > 1 else dim_y
+    h = lines * line_px * dim_y / ey if line_px else dim_y
     pts = [apply(world, x, z) for x in (x0, x0 + w) for z in (piv_z - h / 2, piv_z + h / 2)]
     xs, zs = [p[0] for p in pts], [p[1] for p in pts]
     return min(xs), max(xs), min(zs), max(zs)
+
+
+def set_pane_font(data, pane, font_id):
+    """Копия кадра, где у текстового поля `pane` другой шрифт (4 байта fontId); остальное без изменений."""
+    pos = 0
+    while True:
+        pos = data.find(b"TXPN", pos)
+        if pos < 0:
+            raise ValueError(f"поле {pane} не найдено")
+        try:
+            name, p = cstr(data, pos + 4)
+            if name == pane:
+                _, p = cstr(data, p)
+                p += 4 + 16 + 4 + 8 + 12
+                return data[:p] + struct.pack(">I", font_id) + data[p + 4:]
+        except ValueError:
+            pass
+        pos += 4

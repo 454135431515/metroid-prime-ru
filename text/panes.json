@@ -1,46 +1,552 @@
 {
  "_": "max/lines — пределы, замеренные в игре (скриншот): их превышение — ошибка. Без замера строка шире/длиннее английского оригинала этого поля попадает в «проверить в игре». Какая строка в какое текстовое поле интерфейса попадает. Размер поля берётся из FRME диска (tools/frme.py), привязка строк — из кода декомпиляции (файл в note). Проверку делает tools/validate.py. pane: 'FRME_Имя/имя_поля' или 'имя_поля' (во всех кадрах). max — предел ширины без переноса, замеренный в игре (важнее английского). scroll — поле прокручивается, число строк не ограничено.",
- "_exclusive": [["textpane_filename0", "textpane_popupadvance"], ["textpane_filename0", "textpane_popupextra"], ["textpane_filename0", "textpane_popupcancel"],
-                ["TextPane_BeamMenu", "TextPane_VisorMenu"]],
+ "_exclusive": [
+  [
+   "textpane_filename0",
+   "textpane_popupadvance"
+  ],
+  [
+   "textpane_filename0",
+   "textpane_popupextra"
+  ],
+  [
+   "textpane_filename0",
+   "textpane_popupcancel"
+  ],
+  [
+   "TextPane_BeamMenu",
+   "TextPane_VisorMenu"
+  ]
+ ],
  "_exclusive_note": "Пары полей, которые не видны одновременно: строка выбора режима выводится вместо строки своего слота (в FRME стоит на месте слота 0; соседние слоты 1–2 видны и проверяются, скриншот T8.2); подписи меню лучей и забрал появляются только при открытом своём меню (CHudVisorBeamMenu, проверить).",
- "boss": {"panes": ["textpane_boss"], "keys": ["0552A456:86-91"], "max": 185, "lines": 1,
-          "note": "CSamusHud.cpp GetBossStringIdx; max: место между скобками рамки полоски ≈278 экранных px / 1,5 = 185 (скобки рисуются поверх текста); lines 1: две строки центрируются по полоске и налезают на рамку (скриншоты T8.2)"},
- "energy-warning-combat": {"panes": ["FRME_CombatHud/textpane_energywarning"], "keys": ["0552A456:9"], "lines": 1, "note": "CHudEnergyInterface.cpp; «Мало энергии» в одну строку, скриншот T8.2"},
- "energy-warning": {"panes": ["FRME_ScanHud/textpane_energywarning", "FRME_XRayHudNew/textpane_energywarning", "FRME_ThermalHud/textpane_energywarning", "FRME_BallHud/textpane_energywarning"], "keys": ["0552A456:9"], "note": "CHudEnergyInterface.cpp; не замерено"},
- "threat-warning": {"panes": ["textpane_threatwarning"], "keys": ["0552A456:10-11"], "note": "CHudThreatInterface.cpp"},
- "missile-warning": {"panes": ["textpane_missilewarning"], "keys": ["0552A456:12-13"], "note": "CHudMissileInterface.cpp"},
- "visor-menu": {"panes": ["TextPane_VisorMenu"], "keys": ["0552A456:0-3"], "max": 235, "note": "CHudVisorBeamMenu.cpp skMenuStringIndices; max: «Сканирующее забрало» целиком, скриншот T8.2"},
- "beam-menu": {"panes": ["TextPane_BeamMenu"], "keys": ["0552A456:4-7"], "note": "CHudVisorBeamMenu.cpp skMenuStringIndices"},
- "scanning": {"panes": ["FRME_ScanHudFlat/textpane_scanning"], "keys": ["0552A456:14"], "note": "CHudDecoInterface.cpp"},
- "scan-status": {"panes": ["FRME_ScanHudFlat/textpane_message"], "keys": ["0552A456:15-16"], "note": "CHudDecoInterface.cpp"},
- "hud-memo": {"panes": ["FRME_BaseHud/textpane_message"], "keys": ["0552A456:18-21", "0552A456:104-105", "0552A456:109", "@pickups", "@hints"],
-              "note": "CSamusHud::DisplayHudMemo: CScriptHUDMemo (подборы, подсказки), CThardus, CPlayerGun, CScriptPickup"},
- "file-select": {"panes": ["textpane_filename0", "textpane_filename1", "textpane_filename2", "textpane_filename3"],
-                 "keys": ["0552A456:36", "0552A456:39-41", "0552A456:106-108"], "note": "CFrontEndUI.cpp"},
- "file-select-erase": {"panes": ["FRME_NewFileSelect/textpane_erase"], "keys": ["0552A456:38"], "note": "CFrontEndUI.cpp 0x26"},
- "file-select-gba": {"panes": ["textpane_gba"], "keys": ["0552A456:37"], "note": "CFrontEndUI.cpp 0x25"},
- "file-select-gallery": {"panes": ["textpane_cheats"], "keys": ["0552A456:96"], "note": "CFrontEndUI.cpp 0x60"},
- "front-end-start": {"panes": ["textpane_start"], "keys": ["0552A456:67"], "note": "CFrontEndUI.cpp 0x43"},
- "front-end-options": {"panes": ["textpane_options"], "keys": ["0552A456:94"], "note": "CFrontEndUI.cpp 0x5e"},
- "popup-advance": {"panes": ["textpane_popupadvance"], "keys": ["0552A456:67", "0552A456:95", "0552A456:102"], "note": "CFrontEndUI.cpp 1336/1344/1383: 0x66 0x43 0x5f"},
- "popup-cancel": {"panes": ["textpane_popupcancel"], "keys": ["0552A456:38", "0552A456:94"], "note": "CFrontEndUI.cpp 0x5e 0x26"},
- "popup-extra": {"panes": ["textpane_popupextra"], "keys": ["0552A456:101"], "note": "CFrontEndUI.cpp 0x65"},
- "front-end-proceed": {"panes": ["textpane_proceed"], "keys": ["0552A456:85"], "note": "CFrontEndUI.cpp 0x55"},
- "front-end-cancel": {"panes": ["textpane_cancel"], "keys": ["0552A456:82"], "note": "CFrontEndUI.cpp 0x52"},
- "quit-title": {"panes": ["FRME_QuitScreen/textpane_title"], "keys": ["0552A456:24", "0552A456:27"], "note": "CPauseScreenFrame.cpp skQuitTitles"},
- "quit-yes-no": {"panes": ["FRME_QuitScreen/textpane_yes", "FRME_QuitScreen/textpane_no"], "keys": ["0552A456:22-23"], "note": "CPauseScreenFrame.cpp"},
- "save-choices": {"panes": ["FRME_GenericMenu/textpane_choice0"], "keys": ["19C3F7F7:14-23"], "note": "CSaveGameScreen.cpp opt0..3"},
- "save-message": {"panes": ["FRME_GenericMenu/textpane_message"], "keys": ["19C3F7F7:0-13", "19C3F7F7:24-28"], "note": "CSaveGameScreen.cpp msgA+msgB; две строки над «Да/Нет» видны чисто (скриншот T8.2), предел строк не замерен"},
- "pause-buttons": {"panes": ["FRME_PauseScreen/textpane_title1"], "lines": 3,
-                   "keys": ["500EC6A0:1-5", "500EC6A0:10-14", "500EC6A0:16-64"], "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 3 — «Поменять/кнопки/лучей», скриншот T8.1"},
- "pause-title": {"panes": ["FRME_PauseScreen/textpane_title"], "keys": ["500EC6A0:0", "500EC6A0:9", "500EC6A0:15"], "note": "x178_textpane_title"},
- "pause-switch": {"panes": ["FRME_PauseScreenInstructions/textpane_a"], "keys": ["500EC6A0:6-8"], "max": 117, "note": "CPauseScreen.cpp GetString(6..8); max: «СНАРЯЖЕНИЕ» на нижней панели, скриншот T8.1"},
- "pause-on-off": {"panes": ["FRME_PauseScreen/textpane_double0"], "keys": ["500EC6A0:94-95"], "note": "CPauseScreenFrame.cpp"},
- "pause-sound-mode": {"panes": ["FRME_PauseScreen/textpane_triple0"], "keys": ["500EC6A0:96-98"], "note": "CPauseScreenFrame.cpp"},
- "pause-zoom": {"panes": ["FRME_PauseScreen/textpane_ytext"], "keys": ["500EC6A0:99"], "max": 87, "note": "CPauseScreen.cpp; max: «Масштаб», скриншот T8.1"},
- "pause-body": {"panes": ["FRME_PauseScreen/textpane_body"], "keys": ["500EC6A0:66-93"], "scroll": true, "note": "CInventoryScreen.cpp entryStrIdx"},
- "map-exit": {"panes": ["FRME_MapScreen/textpane_left"], "keys": ["0552A456:42"], "note": "CAutoMapper.cpp 0x2a"},
- "map-legend-button": {"panes": ["FRME_MapScreen/textpane_yicon"], "keys": ["0552A456:43"], "note": "CAutoMapper.cpp 0x2b"},
- "map-world-level": {"panes": ["FRME_MapScreen/textpane_right"], "keys": ["0552A456:44-45"], "note": "CAutoMapper.cpp 0x2c 0x2d"},
- "map-legend": {"panes": ["FRME_MapScreen/textpane_mapLegend"], "keys": ["0552A456:49"], "note": "CAutoMapper.cpp 0x31"}
+ "boss": {
+  "panes": [
+   "textpane_boss"
+  ],
+  "keys": [
+   "0552A456:86-91"
+  ],
+  "max": 160,
+  "lines": 1,
+  "note": "CSamusHud.cpp GetBossStringIdx; lines 1: две строки центрируются по полоске и налезают на рамку; max 160: «Королева-паразит» (176) касается скобок рамки с обеих сторон, оригинал «Parasite Queen» (139) — зазор ~18 px до скобок (скриншоты T8.2); font: узкая копия 13B (tools/cyrillic.py narrow_font), FRME кадров HUD патчит build_mod",
+  "font": "52550001"
+ },
+ "energy-warning-combat": {
+  "panes": [
+   "FRME_CombatHud/textpane_energywarning"
+  ],
+  "keys": [
+   "0552A456:9"
+  ],
+  "lines": 1,
+  "note": "CHudEnergyInterface.cpp; «Мало энергии» в одну строку, скриншот T8.2"
+ },
+ "energy-warning": {
+  "panes": [
+   "FRME_ScanHud/textpane_energywarning",
+   "FRME_XRayHudNew/textpane_energywarning",
+   "FRME_ThermalHud/textpane_energywarning",
+   "FRME_BallHud/textpane_energywarning"
+  ],
+  "keys": [
+   "0552A456:9"
+  ],
+  "note": "CHudEnergyInterface.cpp; не замерено"
+ },
+ "threat-warning": {
+  "panes": [
+   "textpane_threatwarning"
+  ],
+  "keys": [
+   "0552A456:10-11"
+  ],
+  "note": "CHudThreatInterface.cpp"
+ },
+ "missile-warning": {
+  "panes": [
+   "textpane_missilewarning"
+  ],
+  "keys": [
+   "0552A456:12-13"
+  ],
+  "note": "CHudMissileInterface.cpp"
+ },
+ "visor-menu": {
+  "panes": [
+   "TextPane_VisorMenu"
+  ],
+  "keys": [
+   "0552A456:0-3"
+  ],
+  "max": 235,
+  "note": "CHudVisorBeamMenu.cpp skMenuStringIndices; max: «Сканирующее забрало» целиком, скриншот T8.2"
+ },
+ "beam-menu": {
+  "panes": [
+   "TextPane_BeamMenu"
+  ],
+  "keys": [
+   "0552A456:4-7"
+  ],
+  "note": "CHudVisorBeamMenu.cpp skMenuStringIndices"
+ },
+ "scanning": {
+  "panes": [
+   "FRME_ScanHudFlat/textpane_scanning"
+  ],
+  "keys": [
+   "0552A456:14"
+  ],
+  "note": "CHudDecoInterface.cpp"
+ },
+ "scan-status": {
+  "panes": [
+   "FRME_ScanHudFlat/textpane_message"
+  ],
+  "keys": [
+   "0552A456:15-16"
+  ],
+  "note": "CHudDecoInterface.cpp"
+ },
+ "hud-memo": {
+  "panes": [
+   "FRME_BaseHud/textpane_message"
+  ],
+  "keys": [
+   "0552A456:18-21",
+   "0552A456:104-105",
+   "0552A456:109",
+   "@pickups",
+   "@hints"
+  ],
+  "note": "CSamusHud::DisplayHudMemo: CScriptHUDMemo (подборы, подсказки), CThardus, CPlayerGun, CScriptPickup"
+ },
+ "file-select": {
+  "panes": [
+   "textpane_filename0",
+   "textpane_filename1",
+   "textpane_filename2",
+   "textpane_filename3"
+  ],
+  "keys": [
+   "0552A456:39-41",
+   "0552A456:106-108"
+  ],
+  "note": "CFrontEndUI.cpp поле 0: имя слота + «  NN%»; suffix — худший случай",
+  "suffix": "  100%"
+ },
+ "file-select-erase": {
+  "panes": [
+   "FRME_NewFileSelect/textpane_erase"
+  ],
+  "keys": [
+   "0552A456:38"
+  ],
+  "note": "CFrontEndUI.cpp 0x26"
+ },
+ "file-select-gba": {
+  "panes": [
+   "textpane_gba"
+  ],
+  "keys": [
+   "0552A456:37"
+  ],
+  "note": "CFrontEndUI.cpp 0x25"
+ },
+ "file-select-gallery": {
+  "panes": [
+   "textpane_cheats"
+  ],
+  "keys": [
+   "0552A456:96"
+  ],
+  "note": "CFrontEndUI.cpp 0x60"
+ },
+ "front-end-start": {
+  "panes": [
+   "textpane_start"
+  ],
+  "keys": [
+   "0552A456:67"
+  ],
+  "note": "CFrontEndUI.cpp 0x43"
+ },
+ "front-end-options": {
+  "panes": [
+   "textpane_options"
+  ],
+  "keys": [
+   "0552A456:94"
+  ],
+  "note": "CFrontEndUI.cpp 0x5e"
+ },
+ "popup-advance": {
+  "panes": [
+   "textpane_popupadvance"
+  ],
+  "keys": [
+   "0552A456:67",
+   "0552A456:95",
+   "0552A456:102"
+  ],
+  "note": "CFrontEndUI.cpp 1336/1344/1383: 0x66 0x43 0x5f"
+ },
+ "popup-cancel": {
+  "panes": [
+   "textpane_popupcancel"
+  ],
+  "keys": [
+   "0552A456:38",
+   "0552A456:94"
+  ],
+  "note": "CFrontEndUI.cpp 0x5e 0x26"
+ },
+ "popup-extra": {
+  "panes": [
+   "textpane_popupextra"
+  ],
+  "keys": [
+   "0552A456:101"
+  ],
+  "note": "CFrontEndUI.cpp 0x65"
+ },
+ "front-end-proceed": {
+  "panes": [
+   "textpane_proceed"
+  ],
+  "keys": [
+   "0552A456:85"
+  ],
+  "note": "CFrontEndUI.cpp 0x55"
+ },
+ "front-end-cancel": {
+  "panes": [
+   "textpane_cancel"
+  ],
+  "keys": [
+   "0552A456:82"
+  ],
+  "note": "CFrontEndUI.cpp 0x52"
+ },
+ "quit-title": {
+  "panes": [
+   "FRME_QuitScreen/textpane_title"
+  ],
+  "keys": [
+   "0552A456:24",
+   "0552A456:27"
+  ],
+  "note": "CPauseScreenFrame.cpp skQuitTitles"
+ },
+ "quit-yes-no": {
+  "panes": [
+   "FRME_QuitScreen/textpane_yes",
+   "FRME_QuitScreen/textpane_no"
+  ],
+  "keys": [
+   "0552A456:22-23"
+  ],
+  "note": "CPauseScreenFrame.cpp"
+ },
+ "save-choices": {
+  "panes": [
+   "FRME_GenericMenu/textpane_choice0",
+   "FRME_GenericMenu/textpane_choice1",
+   "FRME_GenericMenu/textpane_choice2",
+   "FRME_GenericMenu/textpane_choice3"
+  ],
+  "keys": [
+   "19C3F7F7:14-23"
+  ],
+  "note": "CSaveGameScreen.cpp opt0..3"
+ },
+ "save-message": {
+  "panes": [
+   "FRME_GenericMenu/textpane_message"
+  ],
+  "keys": [
+   "19C3F7F7:0-13",
+   "19C3F7F7:24-28"
+  ],
+  "note": "CSaveGameScreen.cpp msgA+msgB; две строки над «Да/Нет» видны чисто (скриншот T8.2), предел строк не замерен"
+ },
+ "pause-buttons": {
+  "panes": [
+   "FRME_PauseScreen/textpane_title1",
+   "FRME_PauseScreen/textpane_title2",
+   "FRME_PauseScreen/textpane_title3",
+   "FRME_PauseScreen/textpane_title4",
+   "FRME_PauseScreen/textpane_title5",
+   "FRME_PauseScreen/textpane_category0",
+   "FRME_PauseScreen/textpane_category1",
+   "FRME_PauseScreen/textpane_category2",
+   "FRME_PauseScreen/textpane_category3",
+   "FRME_PauseScreen/textpane_category4"
+  ],
+  "lines": 3,
+  "keys": [
+   "500EC6A0:1-5",
+   "500EC6A0:10-14",
+   "500EC6A0:16-64"
+  ],
+  "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 3 — «Поменять/кнопки/лучей», скриншот T8.1"
+ },
+ "pause-title": {
+  "panes": [
+   "FRME_PauseScreen/textpane_title"
+  ],
+  "keys": [
+   "500EC6A0:0",
+   "500EC6A0:9",
+   "500EC6A0:15"
+  ],
+  "note": "x178_textpane_title"
+ },
+ "pause-switch": {
+  "panes": [
+   "FRME_PauseScreenInstructions/textpane_a"
+  ],
+  "keys": [
+   "500EC6A0:6-8"
+  ],
+  "max": 117,
+  "note": "CPauseScreen.cpp GetString(6..8); max: «СНАРЯЖЕНИЕ» на нижней панели, скриншот T8.1"
+ },
+ "pause-on-off": {
+  "panes": [
+   "FRME_PauseScreen/textpane_double0",
+   "FRME_PauseScreen/textpane_double1"
+  ],
+  "keys": [
+   "500EC6A0:94-95"
+  ],
+  "note": "CPauseScreenFrame.cpp"
+ },
+ "pause-sound-mode": {
+  "panes": [
+   "FRME_PauseScreen/textpane_triple0",
+   "FRME_PauseScreen/textpane_triple1",
+   "FRME_PauseScreen/textpane_triple2"
+  ],
+  "keys": [
+   "500EC6A0:96-98"
+  ],
+  "note": "CPauseScreenFrame.cpp"
+ },
+ "pause-zoom": {
+  "panes": [
+   "FRME_PauseScreen/textpane_ytext"
+  ],
+  "keys": [
+   "500EC6A0:99"
+  ],
+  "max": 87,
+  "note": "CPauseScreen.cpp; max: «Масштаб», скриншот T8.1"
+ },
+ "pause-body": {
+  "panes": [
+   "FRME_PauseScreen/textpane_body"
+  ],
+  "keys": [
+   "500EC6A0:66-93"
+  ],
+  "scroll": true,
+  "note": "CInventoryScreen.cpp entryStrIdx"
+ },
+ "map-exit": {
+  "panes": [
+   "FRME_MapScreen/textpane_left"
+  ],
+  "keys": [
+   "0552A456:42"
+  ],
+  "note": "CAutoMapper.cpp 0x2a"
+ },
+ "map-legend-button": {
+  "panes": [
+   "FRME_MapScreen/textpane_yicon"
+  ],
+  "keys": [
+   "0552A456:43"
+  ],
+  "note": "CAutoMapper.cpp 0x2b"
+ },
+ "map-world-level": {
+  "panes": [
+   "FRME_MapScreen/textpane_right"
+  ],
+  "keys": [
+   "0552A456:44-45"
+  ],
+  "note": "CAutoMapper.cpp 0x2c 0x2d"
+ },
+ "map-legend": {
+  "panes": [
+   "FRME_MapScreen/textpane_mapLegend"
+  ],
+  "keys": [
+   "0552A456:49"
+  ],
+  "note": "CAutoMapper.cpp 0x31"
+ },
+ "file-select-world": {
+  "panes": [
+   "FRME_NewFileSelect/textpane_world0",
+   "FRME_NewFileSelect/textpane_world1",
+   "FRME_NewFileSelect/textpane_world2"
+  ],
+  "keys": [
+   "@worlds",
+   "0552A456:51"
+  ],
+  "note": "CFrontEndUI.cpp поле 1: имя региона (MLVL) или 0x33"
+ },
+ "file-select-elapsed": {
+  "panes": [
+   "FRME_NewFileSelect/textpane_date0",
+   "FRME_NewFileSelect/textpane_date1",
+   "FRME_NewFileSelect/textpane_date2"
+  ],
+  "keys": [
+   "0552A456:53-54"
+  ],
+  "note": "CFrontEndUI.cpp поле 3: 0x36 / 0x35"
+ },
+ "front-end-title": {
+  "panes": [
+   "FRME_NewFileSelect/textpane_title",
+   "FRME_FrontEndPL/textpane_title"
+  ],
+  "keys": [
+   "0552A456:98"
+  ],
+  "note": "CFrontEndUI.cpp 0x62"
+ },
+ "options-front-end": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_right0",
+   "FRME_OptionsFrontEnd/textpane_right1",
+   "FRME_OptionsFrontEnd/textpane_right2",
+   "FRME_OptionsFrontEnd/textpane_right3",
+   "FRME_OptionsFrontEnd/textpane_right4"
+  ],
+  "keys": [
+   "500EC6A0:16-35"
+  ],
+  "note": "CPauseScreenFrame.cpp 1142/1163: разделы и пункты настроек"
+ },
+ "options-front-end-values": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_double0",
+   "FRME_OptionsFrontEnd/textpane_double1",
+   "FRME_OptionsFrontEnd/textpane_triple0",
+   "FRME_OptionsFrontEnd/textpane_triple1",
+   "FRME_OptionsFrontEnd/textpane_triple2"
+  ],
+  "keys": [
+   "500EC6A0:94-98"
+  ],
+  "note": "CPauseScreenFrame.cpp 1125-1129"
+ },
+ "options-front-end-title": {
+  "panes": [
+   "FRME_OptionsFrontEnd/textpane_title"
+  ],
+  "keys": [
+   "0552A456:99"
+  ],
+  "note": "CPauseScreenFrame.cpp 1130"
+ },
+ "map-instructions": {
+  "panes": [
+   "FRME_MapScreen/textpane_instructions",
+   "FRME_MapScreen/textpane_instructions1",
+   "FRME_MapScreen/textpane_instructions2"
+  ],
+  "keys": [
+   "0552A456:46-48"
+  ],
+  "note": "CAutoMapper.cpp 695-709: 0x2e 0x2f 0x30"
+ },
+ "scan-short": {
+  "panes": [
+   "FRME_ScanHudFlat/textpane_message"
+  ],
+  "keys": [
+   "@scan-short"
+  ],
+  "note": "CScanDisplay.cpp 283: строка 0 скана"
+ },
+ "scan-long": {
+  "panes": [
+   "FRME_ScanHudFlat/textpane_scrollmessage"
+  ],
+  "keys": [
+   "@scan-long"
+  ],
+  "scroll": true,
+  "note": "CScanDisplay.cpp 306: строка 2 скана, прокрутка"
+ },
+ "gba-screen": {
+  "panes": [
+   "FRME_GbaScreen/textpane_instructions"
+  ],
+  "keys": [
+   "0552A456:77-80"
+  ],
+  "note": "CFrontEndUI.cpp 1536-1541: 0x4d-0x50"
+ },
+ "gba-buttons": {
+  "panes": [
+   "FRME_GbaScreen/textpane_nes",
+   "FRME_GbaScreen/textpane_fusionsuit"
+  ],
+  "keys": [
+   "0552A456:63",
+   "0552A456:66"
+  ],
+  "note": "CFrontEndUI.cpp 1627-1635: 0x3f 0x42"
+ },
+ "gba-yes-no": {
+  "panes": [
+   "FRME_GbaScreen/textpane_fusionsuityes",
+   "FRME_GbaScreen/textpane_fusionsuitno"
+  ],
+  "keys": [
+   "0552A456:64-65"
+  ],
+  "note": "CFrontEndUI.cpp 0x40 0x41"
+ },
+ "gba-title": {
+  "panes": [
+   "FRME_GbaScreen/textpane_title"
+  ],
+  "keys": [
+   "0552A456:100"
+  ],
+  "note": "CFrontEndUI.cpp 0x64"
+ },
+ "gba-link": {
+  "panes": [
+   "FRME_GbaLink/textpane_instructions"
+  ],
+  "keys": [
+   "0552A456:68-76"
+  ],
+  "note": "CFrontEndUI.cpp: связь с GBA"
+ },
+ "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message (CMessageScreen — таблицы сообщений, привязать с регионами), FRME_MapScreen areaname/hint (названия комнат и подсказки зон — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
+ "file-select-new": {
+  "panes": [
+   "textpane_filename0",
+   "textpane_filename1",
+   "textpane_filename2",
+   "textpane_filename3"
+  ],
+  "keys": [
+   "0552A456:36"
+  ],
+  "note": "CFrontEndUI.cpp поле 0 пустого слота: 0x24, без процента"
+ },
+ "_overlap_note": "Проверка наложения не видит повёрнутые в 3D поля (69 из 189, боковые панели паузы): для них только ширина/строки и скриншоты."
 }

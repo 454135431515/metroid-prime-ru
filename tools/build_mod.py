@@ -24,6 +24,28 @@ def en_hash(text):
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
 
 
+def patch_frames(res, out, panes_path="text/panes.json"):
+    """Кадры FRME, где правило panes.json задаёт полю свой шрифт («font»): копия кадра диска
+    со сменой fontId этого поля (frme.set_pane_font) кладётся в мод."""
+    import csv
+    import frme
+    names = {r["name"]: r["id"] for r in csv.DictReader(open(os.path.join(os.path.dirname(res), "inventory.tsv")),
+                                                         delimiter="\t") if r["type"] == "FRME" and r["name"]}
+    patched = {}
+    for name, r in json.load(open(panes_path, encoding="utf-8")).items():
+        if name.startswith("_") or "font" not in r:
+            continue
+        for want in r["panes"]:
+            frame, _, pane = want.rpartition("/")
+            for fid, pname in frme.all_panes(res):
+                if pname == pane and (not frame or names.get(frame) == fid):
+                    data = patched.get(fid) or open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read()
+                    patched[fid] = frme.set_pane_font(data, pane, int(r["font"], 16))
+    for fid, data in patched.items():
+        open(os.path.join(out, f"{fid}.FRME"), "wb").write(data)
+    return sorted(patched)
+
+
 def build(res, ru_path, out, base=None):
     ru = json.load(open(ru_path, encoding="utf-8"))
     if os.path.isdir(out):
@@ -47,6 +69,7 @@ def build(res, ru_path, out, base=None):
             written += 1
         open(os.path.join(out, f"{sid}.STRG"), "wb").write(strg.replace_language(data, "ENGL", strings))
     cyrillic.main(res, out)
+    patch_frames(res, out)
     print(f"mod: {len(ru)} tables, {written} strings, {stale} stale -> {out}")
     return stale
 

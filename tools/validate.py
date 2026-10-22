@@ -42,12 +42,26 @@ def expand(spec):
 
 
 def groups(res):
-    """@pickups — окна подбора предметов (CScriptHUDMemo), @hints — подсказки «…обнаружено»."""
-    out = {"@pickups": [], "@hints": []}
+    """@pickups — окна подбора (CScriptHUDMemo), @hints — подсказки «…обнаружено»,
+    @worlds — названия регионов (имя MLVL: строка слота, CFrontEndUI), @scan-short / @scan-long —
+    строка 0 и 2 таблиц сканов (CScanDisplay: короткий текст и прокрутка)."""
+    out = {"@pickups": [], "@hints": [], "@worlds": [], "@scan-short": [], "@scan-long": []}
+    scans = set()
+    scan_tsv = os.path.join(os.path.dirname(res), "scans.tsv")
+    if os.path.isfile(scan_tsv):
+        scans = {line.split("\t")[1] for line in open(scan_tsv).read().splitlines()[1:]}
+    regions = {"Space Pirate Frigate", "Tallon Overworld", "Chozo Ruins", "Phendrana Drifts", "Phazon Mines",
+               "Magmoor Caverns", "Impact Crater", "Frigate Orpheon"}
     for path in glob.glob(os.path.join(res, "STRG", "*.STRG")):
         sid = os.path.basename(path)[:8]
         strings = dict(strg.parse(open(path, "rb").read()))["ENGL"]
         keys = [f"{sid}:{i}" for i in range(len(strings))]
+        if sid in scans:
+            out["@scan-short"].append(f"{sid}:0")
+            if len(strings) > 2:
+                out["@scan-long"].append(f"{sid}:2")
+        if len(strings) == 1 and strings[0].strip() in regions:
+            out["@worlds"].append(f"{sid}:0")
         if strings[0].startswith("&font=B7BBD0B4;") and "acquired" in strings[0]:
             out["@pickups"] += keys
         elif sid != "0552A456" and all(x.startswith("&just=center;") for x in strings):
@@ -89,10 +103,11 @@ def load_panes(res, path):
             frame, _, pane = want.rpartition("/")
             for (fid, pname), (font_id, wrap, _, ex, ey) in panes.items():
                 if pname == pane and (not frame or names.get(fid) == frame):
-                    boxes.append((font_id, wrap, ex, ey))
+                    boxes.append((r.get("font", font_id), wrap, ex, ey))
         if not boxes:
             raise ValueError(f"panes.json {name}: поле {r['panes']} не найдено в FRME")
-        rules.append((name, keys, sorted(set(boxes)), r.get("max"), r.get("lines"), r.get("scroll", False), font_info))
+        rules.append((name, keys, sorted(set(boxes)), r.get("max"), r.get("lines"), r.get("scroll", False), font_info,
+                      r.get("suffix", "")))
     return rules
 
 
@@ -122,7 +137,8 @@ def layout_errors(rule, key, en, ru, english_of):
     или слово шире поля с переносом. «Проверить» — шире/длиннее английского оригинала этого поля,
     а замера нет: FRME не ограничивает видимую область (текст вылезает за extent и выглядит нормально).
     """
-    name, keys, boxes, max_px, max_lines, scroll, font_info = rule
+    name, keys, boxes, max_px, max_lines, scroll, font_info, suffix = rule
+    en, ru = en + suffix, ru + suffix
     errs, todo = [], []
     for font_id, wrapping, ex, ey in boxes:
         m = FONT_TAG.search(ru)
@@ -177,23 +193,29 @@ def overlap_errors(res, layout, ru, english_of, font_info):
         if rname.startswith("_"):
             continue
         keys = []
+        suffix = r.get("suffix", "")
         for spec in r["keys"]:
             keys += grp[spec] if spec.startswith("@") else expand(spec)
+        en_txt = [english_of(k) + suffix for k in keys if english_of(k)]
+        ru_txt = [(ru.get(k.split(":")[0], {}).get(k.split(":")[1], {}).get("ru") or english_of(k) or "") + suffix
+                  for k in keys]
+        ru_txt = [t for t in ru_txt if t.strip()]
         for want in r["panes"]:
             frame, _, pane = want.rpartition("/")
             for (fid, pname) in panes:
-                if pname == pane and (not frame or names.get(frame) == fid):
-                    per_pane.setdefault((fid, pname), set()).update(keys)
+                if pane == pname and (not frame or names.get(frame) == fid):
+                    slot = per_pane.setdefault((fid, pname), ([], [], r.get("font")))
+                    slot[0].extend(en_txt)
+                    slot[1].extend(ru_txt)
     worlds, boxes = {}, {}
-    for (fid, pname), keys in per_pane.items():
+    for (fid, pname), (en_txt, ru_txt, font_override) in per_pane.items():
         if fid not in worlds:
             worlds[fid] = frme.world_transforms(open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read())
         pane = panes[(fid, pname)]
-        adv, line_h = font_info(pane[0])
+        if pane[-1]:
+            continue  # повёрнуто в 3D (боковые панели паузы): плоская проекция неверна, не проверяется
+        adv, line_h = font_info(font_override or pane[0])
         width = lambda t: max(sum(adv.get(c, 0) for c in ln) for ln in TAG.sub("", t).split("\n"))
-        en_txt = [english_of(k) for k in keys if english_of(k)]
-        ru_txt = [ru.get(k.split(":")[0], {}).get(k.split(":")[1], {}).get("ru") or english_of(k) for k in keys]
-        ru_txt = [t for t in ru_txt if t]
         if not en_txt or not ru_txt:
             continue
         en_w, ru_w = max(map(width, en_txt)), max(map(width, ru_txt))
@@ -265,7 +287,7 @@ def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
             if en.count("\n") != text.count("\n") and not in_layout:
                 warnings.append(f"{key}: переносов {text.count(chr(10))}, в английском {en.count(chr(10))}")
     if rules:
-        errors += overlap_errors(res, layout, ru, english_of, rules[0][-1])
+        errors += overlap_errors(res, layout, ru, english_of, rules[0][6])
     if os.path.isfile(constraints):
         m = RATCHET.search(open(constraints, encoding="utf-8").read())
         if m and count < int(m.group(1)):
