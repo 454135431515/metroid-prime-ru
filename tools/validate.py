@@ -180,7 +180,9 @@ def layout_errors(rule, key, en, ru, english_of):
         if wrapping:
             lines = wrap(plain_ru, adv, ex)
             wide = [ln for ln in lines if width(ln) > ex]
-            en_lines = len(wrap(plain_en, adv, ex))
+            # допуск: наибольшее число строк оригинала в этом поле — так поле задумано
+            en_lines = max([len(wrap(plain_en, adv, ex))] +
+                           [len(wrap(TAG.sub("", english_of(k) or ""), adv, ex)) for k in keys])
             if len(lines) > 1 and lines[-1].strip() and sum(c.isalnum() for c in lines[-1]) < 3:
                 errs.append(f"висячая строка в поле {name}: {lines}")
             if wide:

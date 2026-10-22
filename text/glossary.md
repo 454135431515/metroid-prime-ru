@@ -258,7 +258,9 @@
 | Morphology / Status / Info / Species / Subject | Морфология / Состояние / Сведения / Вид / Объект | своё |
 | Native of Tallon IV | Обитатель Таллона IV | своё |
 | Phazon Batch / Mutagen Tank | Партия Фазона / Мутагенный резервуар | своё |
-| Specimen Cell / Specimen Solitary Holding | Камера образца / Одиночная камера образцов | своё |
+| Specimen Cell / Specimen Solitary Holding | Камера образца / Изолятор образцов | своё |
+| Phazon level >> X | Фазон >> уровень X | своё (вмещается в строку окна скана) |
+| Escape Pod N (в списке запусков) | Капсула N | своё |
 | Phazon Infusion Stage N | Внедрение Фазона, стадия N | своё |
 | Perimeter Defense Turret / Auto Defense Turret | Турель защиты периметра / Автоматическая оборонительная турель | своё |
 | Deck Alpha / Beta / Gamma | палуба «Альфа» / «Бета» / «Гамма» | своё |
