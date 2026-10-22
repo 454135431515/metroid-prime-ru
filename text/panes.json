@@ -283,13 +283,14 @@
    "FRME_PauseScreen/textpane_category3",
    "FRME_PauseScreen/textpane_category4"
   ],
-  "lines": 3,
+  "lines": 2,
   "keys": [
    "500EC6A0:1-5",
    "500EC6A0:10-14",
    "500EC6A0:16-64"
   ],
-  "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 3 — «Поменять/кнопки/лучей», скриншот T8.1"
+  "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 2: «Доп./снаря-/жение» вылезает за нижнюю границу; max 117: «Луч-гарпун» (116) стоит чисто, «Видимость» (119) и «Контроллер» (120) касаются краёв (скриншоты T8.2)",
+  "max": 117
  },
  "pause-title": {
   "panes": [

@@ -153,6 +153,9 @@ def layout_errors(rule, key, en, ru, english_of):
                 errs.append(f"висячая строка в поле {name}: {lines}")
             if wide:
                 errs.append(f"слово шире поля {name} ({ex} px): {wide}")
+            elif max_px and any(width(ln) > max_px for ln in lines):
+                errs.append(f"строка шире замеренного {max_px} px в поле {name}: "
+                            f"{[(ln, width(ln)) for ln in lines if width(ln) > max_px]}")
             elif scroll:
                 pass
             elif max_lines and len(lines) > max_lines:
