@@ -273,7 +273,10 @@
 | Deck Alpha Access / Umbilical Hall | Входной зал / Зал пуповины палубы «Альфа» | своё |
 | Deck Gamma Monitor Hall | Зал наблюдения палубы «Гамма» | своё |
 | Air Lock / Connection Elevator / Cargo Freight Lift | Шлюз / Соединительный лифт / Грузовой лифт | своё |
-| Main Docking Bay / Reactor Core Entrance | Главный стыковочный отсек / Преддверие ядра реактора | своё |
+| Main Docking Bay / Reactor Core Entrance / Reactor Core | Главный стыковочный отсек / Преддверие ядра реактора / Ядро реактора | своё |
+| Main / Subventilation Shaft Section X | Главная / Вспомогательная вентиляционная шахта, секция X | своё |
+| Deck Alpha Mech Shaft | Шахта механизмов палубы «Альфа» | своё |
+| Pickups (что притягивает Заряженный луч) | трофеи | своё |
 | Orpheon / Siriacus / Vol Paragom / Vortex Outpost | «Орфеон» / «Сириакус» / «Вол Парагом» / аванпост «Вортекс» | вики / своё |
 | Entrance to X | Вход в X (во Входной…, во Внешний…) | своё |
 
