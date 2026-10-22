@@ -46,6 +46,19 @@ def patch_frames(res, out, panes_path="text/panes.json"):
     return sorted(patched)
 
 
+def pad_to_32(out):
+    """Ресурсы мода — кратно 32 байтам, как в PAK диска. Порт 0.31.1 отдаёт ресурс, добавленный в
+    NoARAM.pak, с размером, округлённым вниз до 32: хвост шрифта 52550001 терялся, следующий ресурс
+    читался со сдвигом (вылет при загрузке мира). Нули в конце FONT/TXTR игра не читает."""
+    for name in os.listdir(out):
+        path = os.path.join(out, name)
+        n = os.path.getsize(path)
+        if n % 32:
+            fill = b"\xff" if name.endswith(".STRG") else b"\x00"
+            with open(path, "ab") as f:
+                f.write(fill * (32 - n % 32))
+
+
 def build(res, ru_path, out, base=None):
     ru = json.load(open(ru_path, encoding="utf-8"))
     if os.path.isdir(out):
@@ -70,6 +83,7 @@ def build(res, ru_path, out, base=None):
         open(os.path.join(out, f"{sid}.STRG"), "wb").write(strg.replace_language(data, "ENGL", strings))
     cyrillic.main(res, out)
     patch_frames(res, out)
+    pad_to_32(out)
     print(f"mod: {len(ru)} tables, {written} strings, {stale} stale -> {out}")
     return stale
 
