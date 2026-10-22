@@ -107,7 +107,7 @@ def load_panes(res, path):
         if not boxes:
             raise ValueError(f"panes.json {name}: поле {r['panes']} не найдено в FRME")
         rules.append((name, keys, sorted(set(boxes)), r.get("max"), r.get("lines"), r.get("scroll", False), font_info,
-                      r.get("suffix", "")))
+                      r.get("suffix", ""), r.get("seen_max"), r.get("seen_lines")))
     return rules
 
 
@@ -169,7 +169,7 @@ def layout_errors(rule, key, en, ru, english_of):
     или слово шире поля с переносом. «Проверить» — шире/длиннее английского оригинала этого поля,
     а замера нет: FRME не ограничивает видимую область (текст вылезает за extent и выглядит нормально).
     """
-    name, keys, boxes, max_px, max_lines, scroll, font_info, suffix = rule
+    name, keys, boxes, max_px, max_lines, scroll, font_info, suffix, seen_px, seen_lines = rule
     en, ru = en + suffix, ru + suffix
     errs, todo = [], []
     for font_id, wrapping, ex, ey in boxes:
@@ -190,21 +190,27 @@ def layout_errors(rule, key, en, ru, english_of):
                             f"{[(ln, width(ln)) for ln in lines if width(ln) > max_px]}")
             elif scroll:
                 pass
-            elif max_lines and len(lines) > max_lines:
-                errs.append(f"{len(lines)} строк в поле {name}, замерено {max_lines}: {lines}")
-            elif not max_lines and len(lines) > en_lines:
+            elif max_lines and len(lines) > max(max_lines, en_lines):
+                errs.append(f"{len(lines)} строк в поле {name}, замерено {max_lines} (оригинал {en_lines}): {lines}")
+            elif seen_lines and len(lines) > max(seen_lines, en_lines):
+                todo.append(f"{name}: {len(lines)} строк, чисто видели {seen_lines}: {lines}")
+            elif not max_lines and not seen_lines and len(lines) > en_lines:
                 todo.append(f"{name}: {len(lines)} строк против {en_lines} у оригинала: {lines}")
         else:
             en_max = max([ex] + [width(TAG.sub("", english_of(k))) for k in keys if english_of(k) is not None])
             ru_lines, en_lines = plain_ru.count("\n") + 1, plain_en.count("\n") + 1
             if max_lines and ru_lines > max_lines:
                 errs.append(f"{ru_lines} строк в поле {name}, замерено {max_lines}")
-            elif not max_lines and ru_lines > en_lines:
+            elif seen_lines and ru_lines > max(seen_lines, en_lines):
+                todo.append(f"{name}: {ru_lines} строк, чисто видели {seen_lines}: {plain_ru!r}")
+            elif not max_lines and not seen_lines and ru_lines > en_lines:
                 todo.append(f"{name}: {ru_lines} строк против {en_lines} у оригинала: {plain_ru!r}")
             for ln in plain_ru.split("\n"):
                 if max_px and width(ln) > max_px:
                     errs.append(f"шире поля {name}: {width(ln)} px, замерено {max_px}: {ln!r}")
-                elif not max_px and width(ln) > en_max:
+                elif not max_px and seen_px and width(ln) > max(seen_px, en_max):
+                    todo.append(f"{name}: {width(ln)} px, чисто видели {seen_px}: {ln!r}")
+                elif not max_px and not seen_px and width(ln) > en_max:
                     todo.append(f"{name}: {width(ln)} px, оригинал до {en_max}: {ln!r}")
         if errs:
             break
@@ -226,6 +232,7 @@ def overlap_errors(res, layout, ru, english_of, font_info):
     cfg = json.load(open(layout, encoding="utf-8"))
     exclusive = {frozenset(x) for x in cfg.get("_exclusive", [])}
     unverified = {frozenset(x) for x in cfg.get("_unverified", [])}
+    exclusive |= {frozenset(x) for x in cfg.get("_seen_clean", [])}
     per_pane = {}
     for rname, r in json.load(open(layout, encoding="utf-8")).items():
         if rname.startswith("_"):
@@ -357,7 +364,7 @@ def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
             if en.count("\n") != text.count("\n") and not in_layout:
                 warnings.append(f"{key}: переносов {text.count(chr(10))}, в английском {en.count(chr(10))}")
     if rules:
-        o_err, o_todo = overlap_errors(res, layout, ru, english_of, rules[0][6])
+        o_err, o_todo = overlap_errors(res, layout, ru, english_of, rules[0][6])  # font_info
         errors += o_err
         todo += [f"overlap: {t}" for t in o_todo]
     if os.path.isfile(constraints):
