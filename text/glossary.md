@@ -329,6 +329,29 @@
 | Mechanoid: / Aberration: / Species: | Механоид: / Аномалия: / Вид: | своё (Species — как Morphology, решение владельца) |
 | 121° centigrade | 121 °C («°» дорисован в T4e) | своё |
 
+## Поверхность Таллона (T8.5)
+
+| EN | RU | Источник |
+|---|---|---|
+| Tallon Overworld (строка слота сохранения, имя MLVL `44BA9061`) | Поверхн. Таллона — полное не влезает до времени игры (223 px > 210); везде ещё полностью | своё, на утверждение владельца |
+| Landing Site / Tallon Canyon / Canyon Cavern | Место посадки / Каньон Таллона / Пещера в каньоне | своё |
+| Great Tree Hall / Great Tree Chamber | Зал Великого древа / Покой Великого древа | своё |
+| Frigate Crash Site / Frigate Access Tunnel | Место крушения фрегата / Туннель к фрегату | своё |
+| Life Grove / Life Grove Tunnel | Роща жизни / Туннель Рощи жизни | своё |
+| Root Cave / Root Tunnel / Waterfall Cavern / Overgrown Cavern | Пещера корней / Туннель корней / Пещера водопада / Заросшая пещера | своё |
+| Gully / Alcove / Arbor Chamber | Лощина / Ниша / Древесный зал | своё |
+| Temple Hall / Lobby / Security Station | Зал / Вестибюль / Пост охраны храма | своё |
+| Hydro Access Tunnel / Reactor Access / Transport Tunnel A–E | Туннель к гидростанции / Проход к реактору / Транспортный туннель A–E | своё |
+| Transport to Chozo Ruins West / Phazon Mines East / Magmoor Caverns East | Транспорт на запад Руин Чозо / восток Фазоновых Шахт / восток Пещер Магмура | как T8.4a |
+| Savestation | Станция сохранения | вики |
+| Chozo Totem / Chozo Cipher / Cradle | Тотем Чозо / Шифр Чозо / Колыбель | вики / своё |
+| Gunship (журнал) / Hunter-class gunship | Корабль Самус / корабль класса «Охотник» | своё |
+| Galvanic Accelerator Cannon / forearm Scythe | гальваническая ускорительная пушка / наручная коса | своё |
+| Multi-Missile System / Kinetic Breath Weapon / Meson Bomb Launcher / Ultrathermal Flamestrike Projector | система множественных ракет / кинетическое дыхание / мезонный бомбомёт / ультратермический огнемёт | своё |
+| Stone creeper / Saturnine / Guide stem / Tallon fern | Каменный вьюн / Сатурнина / Путеводный стебель / Таллонский папоротник | своё |
+| Glowing spidervine / Red starburst | Светящийся паутинник / Красная звёздочка | своё |
+| Загадки Артефактов: Temple / Grove / Edge / Light / Shrine / Hall / Tower / Tunnel / Lake / Research | Храм / Роща / Край / Свет / Святилище / Зал / Башня / Туннель / Озеро / Лаборатория (зелёная метка — слово из названия комнаты) | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
