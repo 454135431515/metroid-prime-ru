@@ -176,10 +176,9 @@
    "0552A456:18-21",
    "0552A456:104-105",
    "0552A456:109",
-   "@pickups",
    "@hints"
   ],
-  "note": "CSamusHud::DisplayHudMemo: CScriptHUDMemo (подборы, подсказки), CThardus, CPlayerGun, CScriptPickup"
+  "note": "CSamusHud::DisplayHudMemo: подсказки «…обнаружено» (CScriptHUDMemo), CThardus, CPlayerGun, CScriptPickup"
  },
  "file-select": {
   "panes": [
@@ -562,7 +561,7 @@
   ],
   "note": "CFrontEndUI.cpp: связь с GBA"
  },
- "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message (CMessageScreen — таблицы сообщений, привязать с регионами), FRME_MapScreen areaname (названия комнат — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
+ "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message — прочие сообщения кроме подборов (привязать с регионами), FRME_MapScreen areaname (названия комнат — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
  "file-select-new": {
   "panes": [
    "textpane_filename0",
@@ -876,5 +875,14 @@
    "500EC6A0:98"
   ],
   "note": "CPauseScreenFrame.cpp 1125-1129: double0 Off, double1 On, triple0..2 Mono/Stereo/Dolby"
+ },
+ "pickup-message": {
+  "panes": [
+   "FRME_MsgScreen/textpane_message"
+  ],
+  "keys": [
+   "@pickups"
+  ],
+  "note": "CMessageScreen.cpp 88/163: окно подбора — строка таблицы на страницу (листается A); «Получена Ракетница!» в одну строку чисто (скриншот T8.2)"
  }
 }
