@@ -32,6 +32,8 @@ def main(work):
             stale = build_mod.build(res, path, out)
         finally:
             sys.stdout = stdout
+        # порт 0.31.1 режет добавленный в NoARAM ресурс до кратного 32 размера (вылет у лифта)
+        assert all(os.path.getsize(os.path.join(out, n)) % 32 == 0 for n in os.listdir(out))
         built = dict(strg.parse(open(os.path.join(out, f"{sid}.STRG"), "rb").read()))["ENGL"]
         assert stale == 1
         assert built[36] == "[Новая игра]" and built[22] == english[22]
@@ -44,7 +46,8 @@ def main(work):
         for fid in frames:
             a = open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read()
             b = open(os.path.join(out, f"{fid}.FRME"), "rb").read()
-            assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4, fid
+            assert len(b) - len(a) < 32 and not b[len(a):].strip(b"\0"), fid
+            assert sum(x != y for x, y in zip(a, b)) <= 4, fid
         nf = font.parse_font(open(os.path.join(out, f"{cyrillic.NARROW_FONT:08X}.FONT"), "rb").read())
         base = font.parse_font(open(os.path.join(out, f"{cyrillic.NARROW_BASE}.FONT"), "rb").read())
         adv = lambda f: {g.char: g.a + g.b + g.c for g in f.glyphs}
