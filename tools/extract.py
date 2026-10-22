@@ -63,6 +63,11 @@ def main(iso_path, out):
         f.write("type\tid\tpak\tname\tsize\n")
         for r in sorted(rows):
             f.write("\t".join(r) + "\n")
+    with open(os.path.join(out, "txtr_sizes.tsv"), "w") as f:
+        f.write("id\twidth\theight\n")
+        for rid, data in sorted(textures.items()):
+            w, h = struct.unpack_from(">HH", data, 4)
+            f.write(f"{rid:08X}\t{w}\t{h}\n")
     with open(os.path.join(out, "scans.tsv"), "w") as f:
         f.write("scan\tstrg\tcategory\timportant\n")
         for rid, (sid, cat, imp) in sorted(scans.items()):
