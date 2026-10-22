@@ -464,7 +464,16 @@ def ellipsis(P):
     return Drawn(hjoin(dot, dot, dot, gap=max(P.s // 2, 1)))
 
 
+def degree(P):
+    """°: кольцо со скруглёнными углами (как O) у верха заглавной, ячейка образца 'H'."""
+    d = max(3 * P.s + 1, P.h * 2 // 5)  # дырка не уже стема, иначе на мелких кеглях кольцо — точка
+    m = canvas(d, P.h)
+    soft_box(m, 0, 0, d, d, P.s, P.s)
+    return Drawn(m)
+
+
 PUNCTUATION = {
+    "°": ("H", ("draw", degree)),
     "«": ("n", ("draw", lambda P: quote(P, True))),
     "»": ("n", ("draw", lambda P: quote(P, False))),
     "—": ("-", ("draw", dash)),
