@@ -384,6 +384,26 @@ def low_ф(P):
     return Drawn(m, above=up, below=P.desc)
 
 
+def low_б(P):
+    """б: чаша строчной «о» внизу и флажок над ней — ступенчатая диагональ от верха чаши слева
+    вверх направо, как у рукописной «б» (у «Б» верх плоский и во всю ширину, у латинской b флажка нет).
+    Ступени по строке, шириной как штрих диагоналей Deface (Z)."""
+    s, w, h, xh = P.s, P.w, P.h, P.xh
+    m = canvas(w, h)
+    asc = h - xh
+    bowl = P.mask("o")
+    for j, row in enumerate(bowl):
+        for i, v in enumerate(row):
+            if v and i < w:
+                m[asc + j][i] = True
+    seg = max(s + 1, w * 2 // 5)
+    for j in range(asc):
+        frac = (asc - 1 - j) / (asc - 1) if asc > 1 else 1.0
+        x0 = round(frac * (w - seg))
+        rect(m, x0, j, x0 + seg, j + 1)
+    return Drawn(m)
+
+
 def low_small(L):
     """Заглавная латинская L, сжатая до x-высоты."""
     return lambda P: Drawn(shrink_rows(P.mask(L), P.xh))
@@ -393,7 +413,7 @@ LOWERCASE = {
     "а": ("a", ("copy", "a")), "е": ("e", ("copy", "e")), "о": ("o", ("copy", "o")),
     "р": ("p", ("copy", "p")), "с": ("c", ("copy", "c")), "у": ("y", ("copy", "y")),
     "х": ("x", ("copy", "x")), "п": ("n", ("copy", "n")), "м": ("m", ("copy", "m")),
-    "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("6", ("copy", "6")),
+    "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("6", ("draw", low_б)),
     "в": ("n", ("draw", low_small("B"))), "з": ("n", ("draw", low_small("3"))),
     "к": ("n", ("draw", low_small("K"))), "н": ("n", ("draw", low_small("H"))),
     "т": ("n", ("draw", low_small("T"))), "ч": ("n", ("draw", low_small("4"))),
