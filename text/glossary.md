@@ -423,6 +423,18 @@
 | meta-viprium gas / Wave Quake Generator | газ метавиприум / волновой сейсмогенератор | своё |
 | Mechanism: | Механизм: | своё |
 
+## Пещеры Магмура (T8.8)
+
+| EN | RU | Источник |
+|---|---|---|
+| Lava Lake / Warrior Shrine / Twin Fires / Fiery Shores | Лавовое озеро / Святилище Воина / Два огня / Огненные берега | своё (как зелёные слова загадок T8.5) |
+| Burning Trail / Triclops Pit / Geothermal Core / Plasma Processing | Горящая тропа / Яма триклопов / Геотермальное ядро / Обработка плазмы | своё (вики MP2: Обработка Плазмы) |
+| Magmoor Workstation / Monitor Station / Storage Cavern | Рабочая станция Магмура / Пост наблюдения / Пещера-хранилище | своё |
+| North / South Core Tunnel / Shore / Pit / Monitor / Workstation Tunnel | Северный / Южный туннель ядра / Береговой / у ямы / поста наблюдения / к станции | своё |
+| Save Station Magmoor A | Станция сохранения Магмура A | своё |
+| channel door / immersion pistons | дверь канала / погружные поршни | своё |
+| monks of Grondheim / Energy Command / Security Central | монахи Грондхейма / энергетическое командование / Центр охраны | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
