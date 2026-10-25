@@ -33,7 +33,12 @@ def main(work):
         finally:
             sys.stdout = stdout
         # порт 0.31.1 режет добавленный в NoARAM ресурс до кратного 32 размера (вылет у лифта)
-        assert all(os.path.getsize(os.path.join(out, n)) % 32 == 0 for n in os.listdir(out))
+        assert all(os.path.getsize(os.path.join(out, n)) % 32 == 0 for n in os.listdir(out) if not n.endswith(".dds"))
+        # надписи на текстурах: DDS DX10 RGBA8 под id TXTR диска (tools/hud_textures.py)
+        import hud_textures
+        for tid in hud_textures.TEXTURES:
+            head = open(os.path.join(out, f"{tid}.dds"), "rb").read(148)
+            assert head[:4] == b"DDS " and head[84:88] == b"DX10" and head[128:132] == (28).to_bytes(4, "little"), tid
         built = dict(strg.parse(open(os.path.join(out, f"{sid}.STRG"), "rb").read()))["ENGL"]
         assert stale == 1
         assert built[36] == "[Новая игра]" and built[22] == english[22]
@@ -48,7 +53,7 @@ def main(work):
             b = open(os.path.join(out, f"{fid}.FRME"), "rb").read()
             assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4 * a.count(b"TXPN"), fid
         disc = {n.split(".")[0] for d in os.listdir(res) for n in os.listdir(os.path.join(res, d))}
-        assert {n.split(".")[0] for n in os.listdir(out)} <= disc, "мод добавляет новые id"
+        assert {n.split(".")[0] for n in os.listdir(out) if not n.endswith(".dds")} <= disc, "мод добавляет новые id"
     print("build_mod: ok")
     return 0
 

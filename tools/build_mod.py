@@ -54,7 +54,7 @@ def pad_to_32(out):
     for name in os.listdir(out):
         path = os.path.join(out, name)
         n = os.path.getsize(path)
-        if n % 32:
+        if n % 32 and not name.endswith(".dds"):  # .dds — не ресурс PAK, порт читает его целиком
             fill = b"\xff" if name.endswith(".STRG") else b"\x00"
             with open(path, "ab") as f:
                 f.write(fill * (32 - n % 32))
@@ -83,6 +83,8 @@ def build(res, ru_path, out, base=None):
             written += 1
         open(os.path.join(out, f"{sid}.STRG"), "wb").write(strg.replace_language(data, "ENGL", strings))
     cyrillic.main(res, out)
+    import hud_textures
+    hud_textures.main(out)
     patch_frames(res, out)
     pad_to_32(out)
     print(f"mod: {len(ru)} tables, {written} strings, {stale} stale -> {out}")
