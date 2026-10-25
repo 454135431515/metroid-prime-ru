@@ -330,10 +330,12 @@
   "keys": [
    "500EC6A0:1-5",
    "500EC6A0:10-14",
-   "500EC6A0:16-64"
+   "500EC6A0:16-64",
+   "@log-titles"
   ],
-  "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 2: «Доп./снаря-/жение» вылезает за нижнюю границу; max 117: «Луч-гарпун» (116) стоит чисто, «Видимость» (119) и «Контроллер» (120) касаются краёв (скриншоты T8.2)",
-  "max": 117
+  "note": "CLogBookScreen/CInventoryScreen/CPauseScreenFrame: кнопки разделов и пунктов; lines 2: «Доп./снаря-/жение» вылезает за нижнюю границу; max 117: «Луч-гарпун» (116) стоит чисто, «Видимость» (119) и «Контроллер» (120) касаются краёв (скриншоты T8.2); @log-titles — названия записей журнала в тех же кнопках (CLogBookScreen, Tn); squeeze 1.1: названия записей журнала шире кнопок (36 ошибок, Tn), сжатие как у HUD (T7f)",
+  "max": 117,
+  "squeeze": 1.1
  },
  "pause-title": {
   "panes": [
@@ -547,7 +549,7 @@
   ],
   "note": "CFrontEndUI.cpp: связь с GBA"
  },
- "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message — прочие сообщения кроме подборов (привязать с регионами), FRME_MapScreen areaname (названия комнат — с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
+ "_uncovered": "Без правил: FRME_FrontEndD/textpane_world00-09 (не найдено в коде), FRME_MsgScreen/textpane_message — прочие сообщения кроме подборов (привязать с регионами), FRME_BaseHud/textpane_counter и *digits (цифры), подписи кнопок паузы (только значки), FRME_NewFileSelect/textpane_playtime (цифры).",
  "file-select-new": {
   "panes": [
    "textpane_filename0",
@@ -570,6 +572,16 @@
   ],
   "note": "CAutoMapper.cpp 660: подсказка зоны — строка 0 таблицы подсказки (те же таблицы, что HUD-подсказки); скриншот T8.2 — наложение на «Карта планеты»; max 360: место между «Выход» (до −12,44) и значком A (с 11,04) при масштабе 0,0599 — по центру не больше ~2×11/0,06; «Зафиксирована сейсмическая активность.» (418) на скриншоте касается обоих",
   "max": 360
+ },
+ "map-areaname": {
+  "panes": [
+   "FRME_MapScreen/textpane_areaname"
+  ],
+  "keys": [
+   "@rooms"
+  ],
+  "note": "CAutoMapper: название комнаты над картой, шрифт C29C51F1, без переноса, по центру, extentX 384; seen_max 544: «Вспомогательная вентиляционная шахта, секция A» помещается целиком, края экрана не задевает (скриншот Tn, порт 0.33.1)",
+  "seen_max": 544
  },
  "map-right": {
   "panes": [

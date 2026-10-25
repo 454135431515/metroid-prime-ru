@@ -44,12 +44,21 @@ def expand(spec):
 def groups(res):
     """@pickups — окна подбора (CScriptHUDMemo), @hints — подсказки «…обнаружено»,
     @worlds — названия регионов (строка 0 таблиц MLVL_NAMES: слот сохранения, CFrontEndUI), @scan-short / @scan-long —
-    строка 0 и 2 таблиц сканов (CScanDisplay: короткий текст и прокрутка)."""
-    out = {"@pickups": [], "@hints": [], "@worlds": [], "@scan-short": [], "@scan-long": []}
-    scans = set()
+    строка 0 и 2 таблиц сканов (CScanDisplay: короткий текст и прокрутка), @rooms — названия комнат."""
+    out = {"@pickups": [], "@hints": [], "@worlds": [], "@scan-short": [], "@scan-long": [], "@rooms": [], "@log-titles": []}
+    region_paks = {}
+    inv = os.path.join(os.path.dirname(res), "inventory.tsv")
+    if os.path.isfile(inv):
+        for line in open(inv).read().splitlines()[1:]:
+            typ, rid, pak = line.split("\t")[:3]
+            if typ == "STRG" and pak.lower().startswith("metroid"):
+                region_paks[rid] = pak
+    scans, logged = set(), set()
     scan_tsv = os.path.join(os.path.dirname(res), "scans.tsv")
     if os.path.isfile(scan_tsv):
-        scans = {line.split("\t")[1] for line in open(scan_tsv).read().splitlines()[1:]}
+        rows = [line.split("\t") for line in open(scan_tsv).read().splitlines()[1:]]
+        scans = {r[1] for r in rows}
+        logged = {r[1] for r in rows if r[2] not in ("", "0")}
     for path in glob.glob(os.path.join(res, "STRG", "*.STRG")):
         sid = os.path.basename(path)[:8]
         strings = dict(strg.parse(open(path, "rb").read()))["ENGL"]
@@ -58,8 +67,14 @@ def groups(res):
             out["@scan-short"].append(f"{sid}:0")
             if len(strings) > 2:
                 out["@scan-long"].append(f"{sid}:2")
+        if sid in logged and len(strings) > 1:  # название записи журнала: кнопки CLogBookScreen
+            out["@log-titles"].append(f"{sid}:1")
         if sid in MLVL_NAMES:
             out["@worlds"].append(f"{sid}:0")
+        # название комнаты (имя MREA в MLVL; карта, CAutoMapper): однострочная таблица региона без тегов
+        if (sid in region_paks and sid not in scans and sid not in MLVL_NAMES and len(strings) == 1
+                and strings[0].strip() and "&" not in strings[0]):
+            out["@rooms"].append(f"{sid}:0")
         if strings[0].startswith("&font=B7BBD0B4;") and "acquired" in strings[0]:
             out["@pickups"] += keys
         elif sid != "0552A456" and all(x.startswith("&just=center;") for x in strings):

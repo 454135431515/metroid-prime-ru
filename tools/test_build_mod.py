@@ -38,7 +38,7 @@ def main(work):
         assert stale == 1
         assert built[36] == "[Новая игра]" and built[22] == english[22]
         assert [s for i, s in enumerate(built) if i != 36] == [s for i, s in enumerate(english) if i != 36]
-        # кадры с полем босса и HUD-сообщением: от диска отличаются только extentX поля (4 байта), длина та же;
+        # сжатые кадры (squeeze): от диска отличаются только extentX полей (до 4 байт на поле), длина та же;
         # новых id мод не добавляет (порт 0.31.1 ломает таблицу NoARAM.pak с добавленными id, T7f)
         import frme
         frames = [n[:8] for n in os.listdir(out) if n.endswith(".FRME")]
@@ -46,7 +46,7 @@ def main(work):
         for fid in frames:
             a = open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read()
             b = open(os.path.join(out, f"{fid}.FRME"), "rb").read()
-            assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4, fid
+            assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4 * a.count(b"TXPN"), fid
         disc = {n.split(".")[0] for d in os.listdir(res) for n in os.listdir(os.path.join(res, d))}
         assert {n.split(".")[0] for n in os.listdir(out)} <= disc, "мод добавляет новые id"
     print("build_mod: ok")
