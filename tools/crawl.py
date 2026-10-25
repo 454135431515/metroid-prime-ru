@@ -1,11 +1,12 @@
 """Прогон на вылеты: порт с модом по очереди загружает каждую комнату каждого мира.
 
     python -I tools/crawl.py <ISO> <AppRun порта> <папка модов> <отчёт.tsv> [--frames N] [--only MLVL]
+                             [--resume прошлый_отчёт.tsv]
 
 Порт запускается с отдельной user-папкой (work/user-crawl — копия work/user без быстрого
 продолжения; сохранения владельца не трогаются, карта памяти только читается) и консолью
 MP_CONSOLE. Игра загружается со слота A, дальше `warp <MLVL> <MREA>` в каждую комнату и
-N кадров ожидания. Вылет = порт перестал отвечать: строка в отчёте, хвост лога, перезапуск,
+N кадров ожидания; неуязвимость (`god on`), чтобы лава не прерывала прогон. Вылет = порт перестал отвечать: строка в отчёте, хвост лога, перезапуск,
 продолжение со следующей комнаты. Ошибки загрузки ресурсов (`failed to load`, `Truncated`)
 пишутся в отчёт, даже если порт не упал.
 """
@@ -92,6 +93,7 @@ def start(apprun, mods, iso):
         con.cmd("wait 300")
         r = con.cmd("status")
         if r and r[1]:
+            con.cmd("god on")  # лава и кислота: телепорт в опасное место не должен убивать Самус
             return proc, con
     return proc, None
 
@@ -121,6 +123,11 @@ def main(iso, apprun, mods, report, *opts):
     only = opts[opts.index("--only") + 1].upper() if "--only" in opts else None
     plan = [(w, a) for w, areas in worlds(iso) for a in areas if not only or f"{w:08X}" == only]
     rows = []
+    if "--resume" in opts:  # прошлый отчёт: комнаты с «ok» не повторяются
+        prev = [ln.split("\t") for ln in open(opts[opts.index("--resume") + 1], encoding="utf-8").read().splitlines()[1:]]
+        done = {(int(r[0], 16), int(r[1], 16)) for r in prev if r[2] == "ok"}
+        rows = ["\t".join(r) for r in prev if r[2] == "ok"]
+        plan = [p for p in plan if p not in done]
     proc, con = start(apprun, mods, iso)
     i = 0
     while i < len(plan):
@@ -134,6 +141,11 @@ def main(iso, apprun, mods, report, *opts):
             continue
         mark = log_size()
         r = con.cmd(f"warp {w:08X} {a:08X}")
+        if r and not r[1]:  # не в игре (экран гибели, пауза): «Да» на продолжение и ещё раз
+            con.cmd("press a 5")
+            con.cmd("wait 600")
+            con.cmd("god on")
+            r = con.cmd(f"warp {w:08X} {a:08X}")
         r2 = con.cmd(f"wait {frames}") if r else None
         alive = r2 is not None and proc.poll() is None
         bad = new_bad(mark) if os.path.isfile(os.path.join(USER, "metroid_prime_port.log")) else []
