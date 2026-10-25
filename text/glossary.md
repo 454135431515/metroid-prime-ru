@@ -408,6 +408,21 @@
 | Phazon Mines Level Two / Three | второй / третий уровень Фазоновых Шахт | своё |
 | Surface integrity | прочность поверхности | своё |
 
+## Фазоновые Шахты: комнаты, существа (T8.7b)
+
+| EN | RU | Источник |
+|---|---|---|
+| Elite Research | Лаборатория исследования элиты | вики: Лаборатория исследования Элиты |
+| Omega Research / Elite Control / Elite Quarters | Лаборатория «Омега» / Пункт управления элитой / Казармы элиты | своё |
+| Central Dynamo / Phazon Processing Center / Ore Processing | Центральный генератор / Центр обработки Фазона / Обработка руды | своё |
+| Main Quarry / Phazon Mining Tunnel / Fungal Hall A, B | Главный карьер / Фазоновый горный туннель / Грибной зал A, B | своё |
+| Metroid Quarantine A, B / Mine Security Station / Storage Depot | Карантин метроидов A, B / Пост охраны шахт / Склад | своё |
+| Save Station Mines A / Map Station Mines / Missile Station Mines | Станция сохранения шахт A / Картографическая станция шахт / Ракетная станция шахт | своё |
+| Wave / Ice / Plasma / Power Trooper | Волновой / Ледяной / Плазменный / Силовой солдат | глоссарий |
+| Phazon Elite / Omega Pirate / Mega Turret / Burrower / Puffer | Фазоновый элитный пират / Омега-пират / Мегатурель / Землерой / Пуфер | глоссарий |
+| meta-viprium gas / Wave Quake Generator | газ метавиприум / волновой сейсмогенератор | своё |
+| Mechanism: | Механизм: | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
