@@ -352,6 +352,25 @@
 | Glowing spidervine / Red starburst | Светящийся паутинник / Красная звёздочка | своё |
 | Загадки Артефактов: Temple / Grove / Edge / Light / Shrine / Hall / Tower / Tunnel / Lake / Research | Храм / Роща / Край / Свет / Святилище / Зал / Башня / Туннель / Озеро / Лаборатория (зелёная метка — слово из названия комнаты) | своё |
 
+## Ледники Фендраны: сканы, журналы пиратов (T8.6a)
+
+| EN | RU | Источник |
+|---|---|---|
+| Xenome / Beta Xenomes | ксеном / бета-ксеномы | своё |
+| Research Lab Hydra / Aether | лаборатория «Гидра» / «Эфир» | своё |
+| Team Sclera / Project Titan / Strain Vertigo / Lotus Milestone | группа «Склера» / проект «Титан» / штамм «Вертиго» / этап «Лотос» | своё |
+| Phazon vein Omikron / Phazon batch | фазоновая жила «Омикрон» / партия Фазона | своё |
+| Inanimation research | исследования по оживлению неживого | своё |
+| Control Tower / Main Observatory / Quarantine Cave | Диспетчерская башня / Главная обсерватория / Карантинная пещера | своё |
+| Phendrana Shorelines / Glacier One / Ice Vault / Western Temple | Берега Фендраны / «Ледник-1» / Ледяное хранилище / Западный храм | своё |
+| South Research Facility / Containment Vault / Checkpoint | Южный исследовательский комплекс / Изолированное хранилище / КПП | своё |
+| stasis tank / cold damping field | стазисный резервуар / холодное подавляющее поле | своё |
+| Planet Bilium / Oormine II / Twin Tabula | Билиум / Оормин II / Твин Табула | своё (транслит) |
+| Miteralis / Twin Fever | митералис / близнецовая лихорадка | своё |
+| Plasma Artillery Cannon | плазменная артиллерийская пушка | вики (MP3) |
+| Chozo warrior / architect / philosopher / shaman (бюсты) | воин / зодчий / философ / шаман Чозо | своё |
+| trillion teratons | трлн тератонн | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
