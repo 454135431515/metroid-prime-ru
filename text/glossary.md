@@ -387,6 +387,42 @@
 | Urthic ore / class XIX planet | уртическая руда / планета класса XIX | своё |
 | Mechanoid: Sentry Drone | Механоид: Авиаробот-охранник | вики |
 
+## Фазоновые Шахты: сканы, приказы пиратов (T8.7a)
+
+| EN | RU | Источник |
+|---|---|---|
+| Dynamo (электростанция шахт) | Генератор | как T8.4b |
+| Science Team / Central / Mine Security / Operations Command | научная группа / Центральное командование / командование охраны шахт / оперативное командование | своё |
+| Trooper / Elite / unit (особь) | солдат / элита / особь | своё |
+| deca-cycle / cycle / deca-triticale | декацикл / цикл / декатритикале | своё |
+| Elite Ration Mix / Elite Nutrient Mix / Phazon Nutrient Vat | элитная пайковая смесь / элитная питательная смесь / чан с фазоновой питательной смесью | своё |
+| Industrial (Grade) Pulse Beam | промышленный импульсный луч | своё |
+| frigidite | фригидит | своё |
+| Metroid Holding Area / Quarantine area | зона содержания метроидов / зона карантина | своё |
+| Omega Pirate Absorption System | система поглощения Омега-пирата | своё |
+| Repulsion Shield / Wave Quake projector / Wrist Bayonets | отталкивающий щит / волновой сейсмоизлучатель / наручные штыки | своё |
+| battle cruiser Emmons / Egenoid Star Marines | боевой крейсер «Эммонс» / звёздные пехотинцы эгеноидов | своё |
+| Gronkats / Olbaps | гронкаты / ольбапы | своё (транслит) |
+| Security Level Tau / Flight pattern Sigma 4 | уровень безопасности «Тау» / схема полёта «Сигма-4» | своё |
+| Spank Weed (заготовка разработчиков) | хлыст-трава | своё |
+| Phazon Mines Level Two / Three | второй / третий уровень Фазоновых Шахт | своё |
+| Surface integrity | прочность поверхности | своё |
+
+## Фазоновые Шахты: комнаты, существа (T8.7b)
+
+| EN | RU | Источник |
+|---|---|---|
+| Elite Research | Лаборатория исследования элиты | вики: Лаборатория исследования Элиты |
+| Omega Research / Elite Control / Elite Quarters | Лаборатория «Омега» / Пункт управления элитой / Казармы элиты | своё |
+| Central Dynamo / Phazon Processing Center / Ore Processing | Центральный генератор / Центр обработки Фазона / Обработка руды | своё |
+| Main Quarry / Phazon Mining Tunnel / Fungal Hall A, B | Главный карьер / Фазоновый горный туннель / Грибной зал A, B | своё |
+| Metroid Quarantine A, B / Mine Security Station / Storage Depot | Карантин метроидов A, B / Пост охраны шахт / Склад | своё |
+| Save Station Mines A / Map Station Mines / Missile Station Mines | Станция сохранения шахт A / Картографическая станция шахт / Ракетная станция шахт | своё |
+| Wave / Ice / Plasma / Power Trooper | Волновой / Ледяной / Плазменный / Силовой солдат | глоссарий |
+| Phazon Elite / Omega Pirate / Mega Turret / Burrower / Puffer | Фазоновый элитный пират / Омега-пират / Мегатурель / Землерой / Пуфер | глоссарий |
+| meta-viprium gas / Wave Quake Generator | газ метавиприум / волновой сейсмогенератор | своё |
+| Mechanism: | Механизм: | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
