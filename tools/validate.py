@@ -370,7 +370,8 @@ def check(res, ru_path, constraints="CONSTRAINTS.md", layout="text/panes.json"):
                 errors.append(f"{key}: пустой перевод")
             if collections.Counter(TAG.findall(en)) != collections.Counter(TAG.findall(text)):
                 errors.append(f"{key}: теги не совпадают: {TAG.findall(en)} vs {TAG.findall(text)}")
-            missing = sorted(set(TAG.sub("", text)) - chars)
+            # знаки самого оригинала (иероглифы титров со своим &font=) выводятся как в оригинале
+            missing = sorted(set(TAG.sub("", text)) - chars - set(en))
             if missing:
                 errors.append(f"{key}: нет в шрифтах: {''.join(missing)!r}")
             plain_en, plain_ru = len(TAG.sub("", en)), len(TAG.sub("", text))

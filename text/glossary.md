@@ -444,6 +444,26 @@
 | Ultrafrigid Breath / Multi-Missiles / Snare Beams / Particle Wave Projectors | ультрахолодное дыхание / множественные ракеты / лучи-ловушки / излучатели волн частиц | своё |
 | Phazon-fuzed Arm Cannon | Наручная пушка, сплавленная с Фазоном | своё |
 
+## Журнал: данные пиратов (T8.11)
+
+| EN | RU | Источник |
+|---|---|---|
+| Log 10.957.2 | Запись 10.957.2 | своё |
+| Project Helix | проект «Спираль» | своё (helix — спираль ДНК) |
+| Elite Pirate Upsilon / Chameleon Manta | элитный пират «Ипсилон» / маскировочная накидка «Хамелеон-манта» | своё |
+| Plasma Incendiary Launcher | плазменный огнемёт | вики (MP2): Плазменный Огнемет |
+| Spiral Sector / Wanderer-class planet | Спиральный сектор / планета класса «Странник» | своё |
+| geoform 187 / bioform / hominid | геоформа 187 / биоформа / гоминид | своё |
+| V-index mutagen / quadripartite nucleus | мутаген V-индекса / четырёхчастное ядро | своё |
+| Research Headquarters / Combat base / starport | исследовательский штаб / боевая база / космопорт | своё |
+
+## Титры (T8.12)
+
+Имена — латиницей, без склонения. Должности: EXECUTIVE PRODUCER — ИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР; LEAD /
+SENIOR — ВЕДУЩИЙ / СТАРШИЕ; AUDIO LEAD — ВЕДУЩИЙ ЗВУКОРЕЖИССЁР; SOUND DESIGNERS — ЗВУКОРЕЖИССЁРЫ;
+CONNECTIVITY PROGRAMMING — ПРОГРАММИРОВАНИЕ СВЯЗИ; TRANSLATOR/BILINGUAL COORDINATOR — ПЕРЕВОДЧИК/КООРДИНАТОР
+ЛОКАЛИЗАЦИИ; ADDITIONAL CONTRIBUTORS — ТАКЖЕ УЧАСТВОВАЛИ; STAFF CREDITS — КОМАНДА (СОЗДАТЕЛИ METROID PRIME).
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
