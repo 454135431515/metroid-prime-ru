@@ -435,6 +435,15 @@
 | channel door / immersion pistons | дверь канала / погружные поршни | своё |
 | monks of Grondheim / Energy Command / Security Central | монахи Грондхейма / энергетическое командование / Центр охраны | своё |
 
+## Кратер (T8.9)
+
+| EN | RU | Источник |
+|---|---|---|
+| Metroid Prime Lair / Phazon Core / Phazon Infusion Chamber | Логово Метроида Прайма / Фазоновое ядро / Камера внедрения Фазона | своё |
+| Subchamber One…Five / Crater Entry Point / Crater Tunnel A | Первая…Пятая подкамера / Точка входа в кратер / Туннель кратера A | своё |
+| Ultrafrigid Breath / Multi-Missiles / Snare Beams / Particle Wave Projectors | ультрахолодное дыхание / множественные ракеты / лучи-ловушки / излучатели волн частиц | своё |
+| Phazon-fuzed Arm Cannon | Наручная пушка, сплавленная с Фазоном | своё |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
