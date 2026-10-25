@@ -371,6 +371,22 @@
 | Chozo warrior / architect / philosopher / shaman (бюсты) | воин / зодчий / философ / шаман Чозо | своё |
 | trillion teratons | трлн тератонн | своё |
 
+## Ледники Фендраны: комнаты, существа (T8.6b)
+
+| EN | RU | Источник |
+|---|---|---|
+| Chozo Ice Temple / Chapel of the Elders | Ледовый храм Чозо / Часовня Старейшин | вики |
+| Phendrana's Edge / Phendrana Canyon / Phendrana Shorelines | Край Фендраны / Каньон Фендраны / Берега Фендраны | своё |
+| Hunter Cave / Frost Cave / Storage Cave / Security Cave / Quarantine Cave | Охотничья / Морозная / Пещера-склад / Пещера охраны / Карантинная пещера | своё |
+| Ice Ruins East / West / Ruined Courtyard / Frozen Pike | Восточные / Западные ледяные руины / Разрушенный двор / Ледяной пик | своё |
+| Research Core / Specimen Storage / Gravity Chamber / Observatory | Исследовательское ядро / Хранилище образцов / Гравитационная камера / Обсерватория | своё |
+| Upper / Lower Edge Tunnel / Lake Tunnel / Chapel Tunnel | Туннель верхнего / нижнего края / Туннель у озера / Туннель часовни | своё |
+| West / East Tower / Quarantine Monitor / Plaza Walkway | Западная / Восточная башня / Пост наблюдения за карантином / Дорожка к площади | своё |
+| X Entryway / Entrance | Вход в X | своё |
+| Halfpipe | желоб | своё |
+| Urthic ore / class XIX planet | уртическая руда / планета класса XIX | своё |
+| Mechanoid: Sentry Drone | Механоид: Авиаробот-охранник | вики |
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |
