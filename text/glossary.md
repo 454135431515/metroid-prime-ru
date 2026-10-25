@@ -457,6 +457,13 @@
 | V-index mutagen / quadripartite nucleus | мутаген V-индекса / четырёхчастное ядро | своё |
 | Research Headquarters / Combat base / starport | исследовательский штаб / боевая база / космопорт | своё |
 
+## Титры (T8.12)
+
+Имена — латиницей, без склонения. Должности: EXECUTIVE PRODUCER — ИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР; LEAD /
+SENIOR — ВЕДУЩИЙ / СТАРШИЕ; AUDIO LEAD — ВЕДУЩИЙ ЗВУКОРЕЖИССЁР; SOUND DESIGNERS — ЗВУКОРЕЖИССЁРЫ;
+CONNECTIVITY PROGRAMMING — ПРОГРАММИРОВАНИЕ СВЯЗИ; TRANSLATOR/BILINGUAL COORDINATOR — ПЕРЕВОДЧИК/КООРДИНАТОР
+ЛОКАЛИЗАЦИИ; ADDITIONAL CONTRIBUTORS — ТАКЖЕ УЧАСТВОВАЛИ; STAFF CREDITS — КОМАНДА (СОЗДАТЕЛИ METROID PRIME).
+
 ## Материалы (T8.2)
 
 | EN | RU | Источник |

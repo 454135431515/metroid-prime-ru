@@ -398,6 +398,18 @@
    "en": "9278e67a",
    "ru": "Точно стереть?"
   },
+  "51": {
+   "en": "935a8658",
+   "ru": "    -- -- -- -- -- --"
+  },
+  "52": {
+   "en": "cf21dffe",
+   "ru": " --:--"
+  },
+  "53": {
+   "en": "b48f80ae",
+   "ru": " -- -- --"
+  },
   "54": {
    "en": "5fc97790",
    "ru": "в игре"
@@ -2493,6 +2505,24 @@
    "ru": "Пещера-склад"
   }
  },
+ "324D0835": {
+  "0": {
+   "en": "f46caf6d",
+   "ru": "&push;&font=C29C51F1;&main-color=#89D6FF;СОЗДАТЕЛИ METROID PRIME&pop;\n\n&push;&font=C29C51F1;&main-color=#89D6FF;КОМАНДА RETRO STUDIOS&pop;\n\n&push;&main-color=#89D6FF;ИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР&pop;\nSteve Barcia\n\n&push;&main-color=#89D6FF;ПРОДЮСЕР&pop;\nMichael Mann\n\n&push;&main-color=#89D6FF;ВЕДУЩИЙ ДИЗАЙНЕР&pop;\nMark Pacini\n\n&push;&main-color=#89D6FF;СТАРШИЕ ДИЗАЙНЕРЫ&pop;\nKarl Deckard\nMike Wikan\n\n&push;&main-color=#89D6FF;ДИЗАЙНЕРЫ&pop;\nJason Behr\nTony Giovannini\nPaul Reed\nAmanda Rubright\n\n&push;&main-color=#89D6FF;ВЕДУЩИЙ ИНЖЕНЕР&pop;\nMark Johnston\n\n&push;&main-color=#89D6FF;ВЕДУЩИЕ ТЕХНИЧЕСКИЕ ИНЖЕНЕРЫ&pop;\nJack Mathews\nAndy O'Neil\n\n&push;&main-color=#89D6FF;СТАРШИЕ ИНЖЕНЕРЫ&pop;\nMark Haigh-Hutchinson\nDavid 'Zoid' Kirsch\n\n&push;&main-color=#89D6FF;ИНЖЕНЕРЫ&pop;\nTed Chauviere\nJim Gage\nSteve McCrea\nIrving Mah\nKai Martin\nAkintunde Omitowoju\nAlex Quinones\nMarco Thrush\n\n&push;&main-color=#89D6FF;ВЕДУЩИЙ ХУДОЖНИК&pop;\nTodd Keller\n\n&push;&main-color=#89D6FF;СТАРШИЕ ХУДОЖНИКИ&pop;\nMike Sneath\nChris Voellmann\n\n&push;&main-color=#89D6FF;ХУДОЖНИКИ&pop;\nChuck Crist\nDon Hogan\nAndrew Jones\nGene Kohler\nRyan Powell\nElizabeth Pugh\nLuis Ramirez\nDanny Richardson\nAlejandro Roura\nElben Schafers\nLeRoy Strauss\n\n&push;&main-color=#89D6FF;АНИМАТОРЫ&pop;\nDerek Bonikowski\nDax Pallotta\nStephen Zafros\n\n&push;&main-color=#89D6FF;ВЕДУЩИЙ ЗВУКОРЕЖИССЁР&pop;\nClark Wen\n\n&push;&main-color=#89D6FF;ЗВУКОРЕЖИССЁРЫ (ПОДРЯДЧИКИ)&pop;\nFrank Bry\nCrispin Hands\nKen Kurita-Ditz\nKristoffer Larson\n\n&push;&main-color=#89D6FF;АССИСТЕНТ ПРОИЗВОДСТВА&pop;\nRyan Harris\n\n&push;&main-color=#89D6FF;ОСОБАЯ БЛАГОДАРНОСТЬ&pop;\nAl Artus\nKerry Anne Odem\nGeorge Thomas\nEugene Kwon\nTian Lim\nGreg McBride\nCarl Mueller\nDante Treglia\n\n&push;&main-color=#89D6FF;ТАКЖЕ УЧАСТВОВАЛИ&pop;\nScott Johnson\nRick Kohler\nMartin L'Heureux\nFrank Lafuente\nTom Papadatos\nAudrey Peterson\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "1": {
+   "en": "b1b1dd49",
+   "ru": "&push;&font=C29C51F1;&main-color=#89D6FF;КОМАНДА NCL&pop;\n\n&push;&main-color=#89D6FF;ИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР&pop;\nSatoru Iwata\n\n&push;&main-color=#89D6FF;ПРОДЮСЕР&pop;\nShigeru Miyamoto\nKenji Miki\n\n&push;&main-color=#89D6FF;СОПРОДЮСЕР&pop;\nKensuke Tanabe\nAkira Otani\n\n&push;&main-color=#89D6FF;КООРДИНАЦИЯ&pop;\nRisa Tabata\n\n&push;&main-color=#89D6FF;МУЗЫКА&pop;\nKenji Yamamoto\n\n&push;&main-color=#89D6FF;МУЗЫКА (АССИСТЕНТ)&pop;\nKouichi Kyuma\n\n&push;&main-color=#89D6FF;ПРОГРАММИРОВАНИЕ СВЯЗИ&pop;\nTomohiro Kawase\nHideaki Shimizu\n\n&push;&main-color=#89D6FF;ТЕХНИЧЕСКАЯ ПОДДЕРЖКА&pop;\nHironobu Kakui\nYoshihito Ikebata\nYoshito Yasuda\n\n&push;&main-color=#89D6FF;РУКОВОДИТЕЛЬ (МОДЕЛЬ САМУС)&pop;\nTomoyoshi Yamane\nChiharu Sakiyama\n\n&push;&main-color=#89D6FF;ОСОБАЯ БЛАГОДАРНОСТЬ&pop;\nTakehiro Izushi\nYoshio Sakamoto\nTakahiro Harada\nTakao Sawano\nHiroyuki Kimura\nMasashi Goto\nAkiko Miyano\nSuper Mario Club\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "2": {
+   "en": "b0a12fa8",
+   "ru": "&push;&font=C29C51F1;&main-color=#89D6FF;КОМАНДА NOA&pop;\n\n&push;&main-color=#89D6FF;ПРОДЮСЕР (NOA)&pop;\nJeff Miller\n\n&push;&main-color=#89D6FF;ПЕРЕВОДЧИК/КООРДИНАТОР ЛОКАЛИЗАЦИИ&pop;\nTim O'Leary\nKiyohiko Ando\nScot Ritchey\n\n&push;&main-color=#89D6FF;ТЕСТИРОВАНИЕ/КООРДИНАЦИЯ&pop;\nMichael Leslie\n\n&push;&main-color=#89D6FF;РЕДАКТОР&pop;\nLeslie Swan\n\n&push;&main-color=#89D6FF;АВТОР ТЕКСТОВ/РЕДАКТОР&pop;\nNate Bihldorff\n\n&push;&main-color=#89D6FF;ДИРЕКТОР ПО ТЕСТИРОВАНИЮ&pop;\nMichael Kelbaugh\n\n&push;&main-color=#89D6FF;МЕНЕДЖЕР ПО ТЕСТИРОВАНИЮ&pop;\nKyle Hudson\n\n&push;&main-color=#89D6FF;РУКОВОДИТЕЛЬ ТЕСТИРОВАНИЯ&pop;\nEric Bush\n\n&push;&main-color=#89D6FF;КООРДИНАТОР ПРОЕКТА ТЕСТИРОВАНИЯ&pop;\nThomas Hertzog\n\n&push;&main-color=#89D6FF;ТЕСТИРОВАНИЕ&pop;\nMarc Doyal\nJason Mahaffa\nShane Lewis\nMichael Chipman\nKathy Huguenard\nJim Holdeman\nTim Casey\nNicko Gonzalez\nJack Smart\nMelvin Forrest\n\n&push;&main-color=#89D6FF;ТЕХНИК ПО ТЕСТИРОВАНИЮ&pop;\nChris Needham\nDavid Hunziker\n\n&push;&main-color=#89D6FF;ОСОБАЯ БЛАГОДАРНОСТЬ&pop;\nTatsumi Kimishima\nMike Fukuda\nKamon Yoshimura\nChris Campbell\nTom Eberspecher\nJim Wornell\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "3": {
+   "en": "b9296e88",
+   "ru": "&push;&main-color=#89D6FF;Retro Studios также благодарит:&pop;\nОсобая благодарность от команды Retro — Gunpei Yokoi, \nсоздателю Metroid (1941-1997); группе дизайнеров EAD; Metroworks, Edward Boeneke, Doug Saylor, Gabe Ahn, Becky Hook, Steve Wells, Bruno Matzdorf; Heather Guerrero Bonikowski, Gypsy и Brewster; Shelly и Tanner — за понимание; The Sin Den и Party People; Хочу поблагодарить жену Fran за то, что вытерпела все мои переработки; Otis (птица), Привет моему младшему брату Riley Jones. Мысль о том, как он впервые сыграет в нашу игру, с первого дня была для меня огромным стимулом; Моему брату Rick Kohler — за поддержку и чутьё на возможности. Jake и Tara Kohler — за их радость и нетерпение поиграть в папины игры; Моей жене Rebekah Powell; Grissel, Carah C. Click, Monty, Cappy, Rookie, Chase, семье Pallotta; Paul Pugh, Ian Pugh, Marjorie Foster; Моей жене Cheri и дочери Shae; Jill Leversee, Amanda Sage, Lauren Snow, Jen, Whitney Papadatos; Laurel Keller, Therese Settle; Спасибо всем, кто меня поддерживал, и особенно: Robert Mercado, Dr. Alejandro Roura и Magda Bouet; Jared, UG, Casey и PoCo Crew; Sarah Benedict; Louisa Leung; Shalon — за то, что поддерживала меня как жена; Melanie Haigh-Hutchinson, Emma Haigh-Hutchinson, Rachel Haigh-Hutchinson, Diana Koiles, Ronnie Koiles; Anne и Jake; Samantha, Alex и Hannah — за терпение; Cathy и Claude Giovannini; Damaris; The Emerald Knights; Rick, Mary, Matt, Graham и Alec — за терпение, понимание и поддержку; Старший брат благодарит Ben, Danny, Whitt, Zach, Emily и Timmy — моих главных болельщиков!; Brenda Deckard, Todd Keller, Risa Tabata, Gail Tilden, Yoshio Tsuboike, Steve Bond, Greg Coomer, Bill Noland, David Wharton, Laurie Grahms, Marcella Spanogle, Shelly Davies, April Friese, Nick Rudd, Mike Poor, Lisa Powers, Brian Switzer, Bev и Lori Kingery, Lance Mountain, Andrew McKenzie, Sean Booth и Rob Brown; Randy, Pamela и Raina Harris; Хочу поблагодарить мою чудесную жену Nicole и наших детей Joran и Madison за любовь, поддержку и понимание.\n\n\n\n\n\n\n\n\n\n\n\n\n\nВсе права, включая авторские права на игру, сценарий, музыку и программу, принадлежат NINTENDO."
+  }
+ },
  "33471594": {
   "0": {
    "en": "4180c6e3",
@@ -3880,6 +3910,10 @@
    "en": "6547f6b6",
    "ru": "Комбо-\nзаряд"
   },
+  "65": {
+   "en": "4106b2ee",
+   "ru": "[??????]\n\n"
+  },
   "66": {
    "en": "700041dd",
    "ru": "&main-color=#89D6FF;Боевое забрало&main-color=#FF6705B3; — основное забрало. Оно выводит на шлемовый дисплей (HUD) радар, мини-карту, прицельные маркеры, оценку угрозы, шкалу энергии и счётчик ракет.\n\nНажмите &image=SA,3.0,0.6,0.85,F13452F8,C042EC91;, чтобы выбрать Боевое забрало.\n\n&main-color=#89D6FF;Заметки Самус:&main-color=#FF6705B3;\nЗначки имеющихся режимов наручной пушки показаны в правом нижнем углу Боевого забрала.\n\nЗначки имеющихся забрал показаны в левом нижнем углу Боевого забрала.\n\n"
@@ -4007,6 +4041,10 @@
   "97": {
    "en": "f4f390b6",
    "ru": "Стерео"
+  },
+  "98": {
+   "en": "39c1799b",
+   "ru": "Dolby"
   },
   "99": {
    "en": "9b3cbed5",
@@ -8293,6 +8331,24 @@
   "1": {
    "en": "2518e6e3",
    "ru": "Это Артефакт Дикой природы, четвёртый из двенадцати."
+  }
+ },
+ "BBFE0D7D": {
+  "0": {
+   "en": "c51d2e85",
+   "ru": "Создатели Metroid Prime\n\nКоманда Retro Studios\n\nИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР\nSteve Barcia\n\nПРОДЮСЕР\nMichael Mann\n\nВЕДУЩИЙ ДИЗАЙНЕР\nMark Pacini\n\nСТАРШИЕ ДИЗАЙНЕРЫ\nKarl Deckard\nMike Wikan\n\nДИЗАЙНЕРЫ\nJason Behr\nTony Giovannini\nPaul Reed\nAmanda Rubright\n\nВЕДУЩИЙ ИНЖЕНЕР\nMark Johnston\n\nВЕДУЩИЕ ТЕХНИЧЕСКИЕ ИНЖЕНЕРЫ\nJack Mathews\nAndy O'Neil\n\nСТАРШИЕ ИНЖЕНЕРЫ\nMark Haigh-Hutchinson\nDavid 'Zoid' Kirsch\n\nИНЖЕНЕРЫ\nTed Chauviere\nJim Gage\nSteve McCrea\nIrving Mah\nKai Martin\nAkintunde Omitowoju\nAlex Quinones\nMarco Thrush\n\nВЕДУЩИЙ ХУДОЖНИК\nTodd Keller\n\nСТАРШИЕ ХУДОЖНИКИ\nMike Sneath\nChris Voellmann\n\nХУДОЖНИКИ\nChuck Crist\nDon Hogan\nAndrew Jones\nGene Kohler\nRyan Powell\nElizabeth Pugh\nLuis Ramirez\nDanny Richardson\nAlejandro Roura\nElben Schafers\nLeRoy Strauss\n\nАНИМАТОРЫ\nDerek Bonikowski\nDax Pallotta\nStephen Zafros\n\nВЕДУЩИЙ ЗВУКОРЕЖИССЁР\nClark Wen\n\nЗВУКОРЕЖИССЁРЫ (ПОДРЯДЧИКИ)\nFrank Bry\nCrispin Hands\nKen Kurita-Ditz\nKristoffer Larson\n\nАССИСТЕНТ ПРОИЗВОДСТВА\nRyan Harris\n\nОСОБАЯ БЛАГОДАРНОСТЬ\nAl Artus\nKerry Anne Odem\nGeorge Thomas\nEugene Kwon\nTian Lim\nGreg McBride\nCarl Mueller\nDante Treglia\n\nТАКЖЕ УЧАСТВОВАЛИ\nScott Johnson\nRick Kohler\nMartin L'Heureux\nFrank Lafuente\nTom Papadatos\nAudrey Peterson\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "1": {
+   "en": "259731ee",
+   "ru": "Команда NCL\n\nИСПОЛНИТЕЛЬНЫЙ ПРОДЮСЕР\n&push;&font=30707C0C;岩田聡&pop;(Satoru Iwata)\n\nПРОДЮСЕР\n&push;&font=30707C0C;宮本茂&pop;(Shigeru Miyamoto)\n&push;&font=30707C0C;三木研次&pop;(Kenji Miki)\n\nСОПРОДЮСЕР\n&push;&font=30707C0C;田邊賢輔&pop;(Kensuke Tanabe)\n&push;&font=30707C0C;大谷明&pop;(Akira Otani)\n\nКООРДИНАЦИЯ\n&push;&font=30707C0C;田端里沙&pop;(Risa Tabata)\n\nМУЗЫКА\n&push;&font=30707C0C;山本健誌&pop;(Kenji Yamamoto)\n\nМУЗЫКА (АССИСТЕНТ)\n&push;&font=30707C0C;久馬浩一&pop;(Kouichi Kyuma)\n\nПРОГРАММИРОВАНИЕ СВЯЗИ\n&push;&font=30707C0C;川瀬智広&pop;(Tomohiro Kawase)\n&push;&font=30707C0C;清水英明&pop;(Hideaki Shimizu)\n\nТЕХНИЧЕСКАЯ ПОДДЕРЖКА\n&push;&font=30707C0C;角井博信&pop;(Hironobu Kakui)\n&push;&font=30707C0C;池端良仁&pop;(Yoshihito Ikebata)\n&push;&font=30707C0C;安田芳人&pop;(Yoshito Yasuda)\n\nРУКОВОДИТЕЛЬ (МОДЕЛЬ САМУС)\n&push;&font=30707C0C;山根知美&pop;(Tomoyoshi Yamane)\n&push;&font=30707C0C;崎山千晴&pop;(Chiharu Sakiyama)\n\nОСОБАЯ БЛАГОДАРНОСТЬ\n&push;&font=30707C0C;出石武宏&pop;(Takehiro Izushi)\n&push;&font=30707C0C;坂本賀勇&pop;(Yoshio Sakamoto)\n&push;&font=30707C0C;原田貴裕&pop;(Takahiro Harada)\n&push;&font=30707C0C;沢野貴夫&pop;(Takao Sawano)\n&push;&font=30707C0C;木村浩之&pop;(Hiroyuki Kimura)\n&push;&font=30707C0C;後藤正志&pop;(Masashi Goto)\n&push;&font=30707C0C;宮野明子&pop;(Akiko Miyano)\nSuper Mario Club\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "2": {
+   "en": "f922bde5",
+   "ru": "Команда NOA\n\nПРОДЮСЕР (NOA)\nJeff Miller\n\nПЕРЕВОДЧИК/КООРДИНАТОР ЛОКАЛИЗАЦИИ\nTim O'Leary\nKiyohiko Ando\nScot Ritchey\n\nТЕСТИРОВАНИЕ/КООРДИНАЦИЯ\nMichael Leslie\n\nРЕДАКТОР\nLeslie Swan\n\nАВТОР ТЕКСТОВ/РЕДАКТОР\nNate Bihldorff\n\nДИРЕКТОР ПО ТЕСТИРОВАНИЮ\nMichael Kelbaugh\n\nМЕНЕДЖЕР ПО ТЕСТИРОВАНИЮ\nKyle Hudson\n\nРУКОВОДИТЕЛЬ ТЕСТИРОВАНИЯ\nEric Bush\n\nКООРДИНАТОР ПРОЕКТА ТЕСТИРОВАНИЯ\nThomas Hertzog\n\nТЕСТИРОВАНИЕ\nMarc Doyal\nJason Mahaffa\nShane Lewis\nMichael Chipman\nKathy Huguenard\nJim Holdeman\nTim Casey\nNicko Gonzalez\nJack Smart\nMelvin Forrest\n\nТЕХНИК ПО ТЕСТИРОВАНИЮ\nChris Needham\nDavid Hunziker\n\nОСОБАЯ БЛАГОДАРНОСТЬ\nTatsumi Kimishima\nMike Fukuda\nKamon Yoshimura\nChris Campbell\nTom Eberspecher\nJim Wornell\n&push;&main-color=#00000000;.&pop;\n&push;&main-color=#00000000;.&pop;"
+  },
+  "3": {
+   "en": "ac2cf7b8",
+   "ru": "Retro Studios также благодарит:\nОсобая благодарность от команды Retro — Gunpei Yokoi, создателю Metroid (1941-1997); группе дизайнеров EAD; Metroworks, Edward Boeneke, Doug Saylor, Gabe Ahn, Becky Hook, Steve Wells, Bruno Matzdorf; Heather Guerrero Bonikowski Gypsy и Brewster Farscape; Shelly и Tanner — за понимание; The Sin Den и Party People; Да, хочу поблагодарить жену Fran за то, что вытерпела все мои переработки; Otis (птица) Привет моему младшему брату Riley Jones. Мысль о том, как он впервые сыграет в нашу игру, с первого дня была для меня огромным стимулом; Моему брату Rick Kohler — за поддержку и чутьё на возможности. Jake и Tara Kohler — за их радость и нетерпение поиграть в папины игры; Моей жене Rebekah Powell; Grissel, Carah C. Click, Monty , Cappy , Rookie , Chase , семье Pallotta; Paul Pugh, Ian Pugh, Marjorie Foster; Моей жене Cheri и дочери Shae;  Jill Leversee, Amanda Sage, Lauren Snow,  Jen, Whitney Papadatos; Laurel Keller, Therese Settle; Спасибо всем, кто меня поддерживал, и особенно: Robert Mercado, Dr. Alejandro Roura и Magda Bouet; Jared, UG, Casey и PoCo Crew; Sarah Benedict; Louisa Leung; Shalon — за то, что поддерживала меня как жена; Melanie Haigh-Hutchinson, Emma Haigh-Hutchinson, Rachel Haigh-Hutchinson, Diana Koiles, Ronnie Koiles;  Anne и Jake;  Samantha, Alex и Hannah — за терпение; Cathy и Claude Giovannini; Damaris; The Emerald Knights; Rick, Mary, Matt, Graham и Alec — за терпение, понимание и поддержку; Старший брат благодарит Ben, Danny, Whitt, Zach, Emily и Timmy — моих главных болельщиков!;  Brenda Deckard, Todd Keller, Risa Tabata, Gail Tilden, Yoshio Tsuboike, Steve Bond, Greg Coomer, Bill Noland, David Wharton, Laurie Grahams, Marcella Spanogle, Shelly Davies, April Friese, Nick Rudd, Mike Poor, Lisa Powers, Brian Switzer, Bev и Lori Kingery, Lance Mountain, Andrew McKenzie, Sean Booth и Rob Brown; Randy, Pamela и Raina Harris;  Хочу поблагодарить мою чудесную жену Nicole и наших детей Joran и Madison за любовь, поддержку и понимание.\n\n\n\n\n\n\n\n\n\n\nВсе права, включая авторские права на игру, сценарий, музыку и программу, принадлежат Nintendo."
   }
  },
  "BC23DC5B": {
