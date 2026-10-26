@@ -14,7 +14,7 @@ import os
 import struct
 import sys
 
-from PIL import Image
+from PIL import Image, ImageChops, ImageFilter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import font  # noqa: E402
@@ -29,6 +29,17 @@ TEXTURES = {
                            ("ЭНЕРГИЯ", 64, 9, 14, 4, "center")]),
     "D411B6BB": (256, 32, [("[", 14, 4, 24, 0, "left"), ("]", 241, 4, 24, 0, "right"),
                            ("НАЖМИТЕ START", 128, 9, 16, 1, "center")]),
+    # билборды лифтов: белое 14 px, обводка, слева с x=3; длинные — с меньшим зазором, чтобы влезть в 250 px
+    "0C8F3C63": (256, 32, [("Ледники Фендраны", 3, 8, 14, ("fit", 8, 250), "left")], "halo"),
+    "2AF13ACD": (256, 32, [("Руины Чозо", 3, 8, 14, ("fit", 8, 250), "left")], "halo"),
+    "C74CCFA5": (256, 32, [("Кратер", 3, 8, 14, ("fit", 8, 250), "left")], "halo"),
+    "D79A78E1": (256, 32, [("Фазоновые Шахты", 3, 8, 14, ("fit", 8, 250), "left")], "halo"),
+    "FEE1E54F": (256, 32, [("Поверхность Таллона", 3, 8, 14, ("fit", 8, 250), "left")], "halo"),
+    # подписи галереи (бонусы главного меню): I4 — прозрачность равна яркости
+    "0037F8DC": (128, 32, [("Галерея 1", 6, 9, 13, 1, "left")], "alpha"),
+    "86A38A72": (128, 32, [("Галерея 2", 6, 9, 13, 1, "left")], "alpha"),
+    "4DFF59D7": (128, 32, [("Галерея 3", 6, 9, 13, 1, "left")], "alpha"),
+    "50FA696F": (128, 32, [("Галерея 4", 6, 9, 13, 1, "left")], "alpha"),
     "89E7453F": (128, 128, [("ВЫХОД", 61.5, 10, 16, 1, "center"),
                             ("НАЗАД", 18, 40, 16, 1, "left"),
                             ("ДАЛЕЕ", 18, 70, 16, 1, "left")]),
@@ -75,17 +86,32 @@ def word(masks, cap, text, height, gap):
 
 
 def draw(masks, cap, spec):
-    w, h, items = spec
+    """RGBA-текстура по описанию: стиль plain — белое на чёрном (альфа 255), alpha — белое, прозрачность
+    равна яркости (I4 галереи), halo — белое с мягкой чёрной обводкой ~2 px на прозрачном (билборды лифтов)."""
+    w, h, items = spec[:3]
+    style = spec[3] if len(spec) > 3 else "plain"
     big = Image.new("L", (w * SS, h * SS))
     for text, x, top, height, gap, just in items:
+        if isinstance(gap, tuple):  # ("fit", наибольший зазор, ширина): длинное слово — зазор меньше
+            _, most, room = gap
+            gap = most
+            while gap > 0 and word(masks, cap, text, height, gap)[0].width / SS > room:
+                gap -= 1
         img, cap_top = word(masks, cap, text, height, gap)
         left = {"left": x, "right": x + 1 - img.width / SS, "center": x - img.width / SS / 2}[just]
         big.paste(img, (round(left * SS), top * SS - cap_top))
-    return big.resize((w, h), Image.LANCZOS)
+    m = big.resize((w, h), Image.LANCZOS)
+    if style == "plain":
+        return Image.merge("RGBA", (m, m, m, Image.new("L", m.size, 255)))
+    if style == "alpha":
+        return Image.merge("RGBA", (m, m, m, m))
+    halo = big.filter(ImageFilter.MaxFilter(4 * SS + 1)).filter(ImageFilter.BoxBlur(SS)).resize((w, h), Image.LANCZOS)
+    halo = halo.point(lambda v: v * 218 // 255)  # у оригинала тень до альфы 218
+    return Image.merge("RGBA", (m, m, m, ImageChops.lighter(halo, m)))
 
 
 def dds(img):
-    """DDS DX10, R8G8B8A8_UNORM, полная цепочка мипов; RGB = интенсивность, альфа 255 (как дамп)."""
+    """DDS DX10, R8G8B8A8_UNORM, полная цепочка мипов."""
     levels = [img]
     while levels[-1].width > 1 or levels[-1].height > 1:
         p = levels[-1]
@@ -96,8 +122,7 @@ def dds(img):
     pf = struct.pack("<II4sIIIII", 32, 0x4, b"DX10", 0, 0, 0, 0, 0)
     caps = struct.pack("<IIIII", 0x1000 | 0x8 | 0x400000, 0, 0, 0, 0)
     dx10 = struct.pack("<IIIII", 28, 3, 0, 1, 0)
-    body = b"".join(bytes(b for v in lv.get_flattened_data() for b in (v, v, v, 255)) for lv in levels)
-    return head + pf + caps + dx10 + body
+    return head + pf + caps + dx10 + b"".join(lv.convert("RGBA").tobytes() for lv in levels)
 
 
 def main(mod_dir, sheet=None):
@@ -109,10 +134,13 @@ def main(mod_dir, sheet=None):
         open(os.path.join(mod_dir, f"{tid}.dds"), "wb").write(dds(img.transpose(Image.FLIP_TOP_BOTTOM)))
     if sheet:
         s = 4
-        out = Image.new("L", (max(i.width for i in imgs.values()) * s, sum(i.height * s + 8 for i in imgs.values())), 60)
+        out = Image.new("RGBA", (max(i.width for i in imgs.values()) * s, sum(i.height * s + 8 for i in imgs.values())),
+                        (90, 0, 90, 255))
         y = 0
         for img in imgs.values():
-            out.paste(img.resize((img.width * s, img.height * s), Image.NEAREST), (0, y))
+            bg = Image.new("RGBA", img.size, (90, 0, 90, 255))
+            bg.alpha_composite(img)
+            out.paste(bg.resize((img.width * s, img.height * s), Image.NEAREST), (0, y))
             y += img.height * s + 8
         out.save(sheet)
     print(f"hud textures: {', '.join(TEXTURES)}")
