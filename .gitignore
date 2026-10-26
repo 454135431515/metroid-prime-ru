@@ -21,4 +21,4 @@ port_settings.ini
 metroid_prime_port*.log
 *.db
 archipelago.json
-screenshots/
+/screenshots/
