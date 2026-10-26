@@ -54,7 +54,7 @@ def pad_to_32(out):
     for name in os.listdir(out):
         path = os.path.join(out, name)
         n = os.path.getsize(path)
-        if n % 32 and not name.endswith(".dds"):  # .dds — не ресурс PAK, порт читает его целиком
+        if os.path.isfile(path) and n % 32 and not name.endswith(".dds"):  # .dds — не ресурс PAK, порт читает его целиком
             fill = b"\xff" if name.endswith(".STRG") else b"\x00"
             with open(path, "ab") as f:
                 f.write(fill * (32 - n % 32))
@@ -85,6 +85,12 @@ def build(res, ru_path, out, base=None):
     cyrillic.main(res, out)
     import hud_textures
     hud_textures.main(out)
+    # HD-шрифт — только поверх импорта Remastered владельца (мод remastered-models рядом)
+    hd = os.path.join(os.path.dirname(os.path.abspath(out)), "remastered-models", "font", "deface.sdfont")
+    if os.path.isfile(hd):
+        import hd_font
+        os.makedirs(os.path.join(out, "font"))
+        hd_font.build(hd, os.path.join(out, "font", "deface.sdfont"))
     patch_frames(res, out)
     pad_to_32(out)
     print(f"mod: {len(ru)} tables, {written} strings, {stale} stale -> {out}")

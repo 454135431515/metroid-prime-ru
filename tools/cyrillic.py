@@ -105,7 +105,7 @@ class Metrics:
         full = [j for j, r in enumerate(hm) if all(r)]
         self.mid, self.t = full[0], len(full)          # средняя перекладина: начало, толщина
         self.xh = len(self.mask("n"))                  # x-высота
-        self.desc = max(len(self.mask("p")) - self.xh, 2)  # выносной элемент вниз
+        self.desc = max(len(self.mask("p")) - self.xh, 2 * UNIT)  # выносной элемент вниз
 
     def mask(self, ch):
         if ch in self.overrides:
@@ -137,11 +137,24 @@ def canvas(w, h):
     return blank(w, h)
 
 
+# Размер пикселя растрового шрифта в пикселях рисунка: рецепты рисуют в нём свои мелкие отступы и
+# срезы. 1 — растровые шрифты диска; HD-шрифт (tools/hd_font.py) рисует крупнее и ставит свой.
+UNIT = 1
+
+
 def chamfer(m, *corners):
-    """Срезает внешние угловые пиксели (так скруглены замкнутые формы Deface): (x, y) пары."""
+    """Срезает внешние угловые пиксели (так скруглены замкнутые формы Deface): (x, y) пары.
+    Крупнее одного пикселя (UNIT > 1) срез — треугольник UNIT×UNIT внутрь буквы."""
+    h, w = len(m), len(m[0])
     for x, y in corners:
-        if 0 <= y < len(m) and 0 <= x < len(m[0]):
-            m[y][x] = False
+        if not (0 <= y < h and 0 <= x < w):
+            continue
+        sx = 1 if x == 0 or not m[y][x - 1] else -1
+        sy = 1 if y == 0 or not m[y - 1][x] else -1
+        for a in range(UNIT):
+            for b in range(UNIT - a):
+                if 0 <= y + sy * a < h and 0 <= x + sx * b < w:
+                    m[y + sy * a][x + sx * b] = False
 
 
 def hjoin(*masks, gap=0):
@@ -189,12 +202,12 @@ def stems_diag(P, w, h):
     """И: два стема и ступенчатая диагональ снизу слева вверх направо.
     Диагональ тоньше стема (s - 1, не меньше 2), иначе в узкой букве не остаётся просвета."""
     s = P.s
-    d = max(s - 1, 2)
+    d = max(s - UNIT, 2 * UNIT)
     m = canvas(w, h)
     rect(m, 0, 0, s, h)
     rect(m, w - s, 0, w, h)
     e = min(P.t, h // 4)  # концы диагонали отступают от краёв, как у X
-    diagonal(m, s - 1, h - 1 - e, w - s - d + 1, e, d)
+    diagonal(m, s - UNIT, h - 1 - e, w - s - d + UNIT, e, d)
     return m
 
 
@@ -220,16 +233,17 @@ def cap_Г(P):
 
 
 def cap_Д(P):
-    s, t, w, h = P.s, P.t, P.w + 2, P.h
+    u = UNIT
+    s, t, w, h = P.s, P.t, P.w + 2 * u, P.h
     m = canvas(w, h)
-    rect(m, 2, 0, w - s, t)
-    rect(m, 2, 0, 2 + s, h)
+    rect(m, 2 * u, 0, w - s, t)
+    rect(m, 2 * u, 0, 2 * u + s, h)
     rect(m, w - s - 0, 0, w, h)
     rect(m, 0, h - t, w, h)
-    chamfer(m, (2, 0))
-    tail(m, 0, s - 1, P.desc)
+    chamfer(m, (2 * u, 0))
+    tail(m, 0, s - u, P.desc)
     for row in m[h:]:
-        for i in range(w - s + 1, w):
+        for i in range(w - s + u, w):
             row[i] = True
     return Drawn(m, below=P.desc)
 
@@ -240,27 +254,27 @@ def cap_Ж(P):
 
 
 def cap_И(P):
-    return Drawn(stems_diag(P, P.w + 2, P.h))
+    return Drawn(stems_diag(P, P.w + 2 * UNIT, P.h))
 
 
 def cap_Й(P):
-    w = P.w + 2
+    w = P.w + 2 * UNIT
     m = stems_diag(P, w, P.h)
-    above = P.t + 1
+    above = P.t + UNIT
     breve = canvas(w, above)
-    rect(breve, P.s, 0, w - P.s, above - 1)
+    rect(breve, P.s, 0, w - P.s, above - UNIT)
     return Drawn(breve + m, above=above)
 
 
 def cap_Л(P):
     """Л: левая нога со ступенькой — сверху сдвинута внутрь, внизу у края (иначе читается как П)."""
     s, t, w, h = P.s, P.t, P.w, P.h
-    k = max(s // 2, 2)
+    k = max(s // 2, 2 * UNIT)
     knee = h * 2 // 3
     m = canvas(w, h)
     rect(m, k, 0, w, t)
     rect(m, k, 0, k + s, knee)
-    rect(m, 0, knee - 1, s, h)
+    rect(m, 0, knee - UNIT, s, h)
     rect(m, w - s, 0, w, h)
     chamfer(m, (k, 0), (w - 1, 0))
     return Drawn(m)
@@ -279,9 +293,9 @@ def cap_У(P):
 
 def cap_Ф(P):
     s, t, h = P.s, P.t, P.h
-    w = P.w + 4
+    w = P.w + 4 * UNIT
     m = canvas(w, h)
-    soft_box(m, 0, 1, w, h - 1, s, t)
+    soft_box(m, 0, UNIT, w, h - UNIT, s, t)
     c = (w - s) // 2
     rect(m, c, 0, c + s, h)
     return Drawn(m)
@@ -291,13 +305,15 @@ def cap_Ц(P, base=None):
     s, t, h = P.s, P.t, P.h
     body = base if base is not None else P.mask("U")
     w0 = len(body[0])
-    m = [r + [False] * 2 for r in body]
+    u = UNIT
+    m = [r + [False] * 2 * u for r in body]
     for j in range(h - t, h):
-        for i in range(w0 - 1, w0 + 2):
+        for i in range(w0 - u, w0 + 2 * u):
             m[j][i] = True
     for j in range(h - t, h):  # угол без скругления: перекладина уходит в хвост
-        m[j][w0 - 1] = True
-    tail(m, w0, w0 + 2, P.desc)
+        for i in range(w0 - u, w0):
+            m[j][i] = True
+    tail(m, w0, w0 + 2 * u, P.desc)
     return Drawn(m, below=P.desc)
 
 
@@ -306,7 +322,7 @@ def cap_Щ(P):
 
 
 def cap_Ъ(P):
-    k = 2
+    k = 2 * UNIT
     w = P.w + k
     m = canvas(w, P.h)
     sign = soft_sign(P, P.w, P.h, P.mid)
@@ -316,10 +332,10 @@ def cap_Ъ(P):
 
 
 def cap_Ы(P):
-    sign = soft_sign(P, P.w - 2, P.h, P.mid)
+    sign = soft_sign(P, P.w - 2 * UNIT, P.h, P.mid)
     stem = canvas(P.s, P.h)
     rect(stem, 0, 0, P.s, P.h)
-    return Drawn(hjoin(sign, stem, gap=2))
+    return Drawn(hjoin(sign, stem, gap=2 * UNIT))
 
 
 def cap_Ь(P):
@@ -335,18 +351,19 @@ def cap_Э(P):
 
 def cap_Ю(P):
     o = P.mask("O")
-    stem = canvas(P.s + 2, P.h)
+    stem = canvas(P.s + 2 * UNIT, P.h)
     rect(stem, 0, 0, P.s, P.h)
-    rect(stem, P.s, P.mid, P.s + 2, P.mid + P.t)
+    rect(stem, P.s, P.mid, P.s + 2 * UNIT, P.mid + P.t)
     return Drawn(hjoin(stem, o))
 
 
 def cap_Ё(P):
-    above = P.t + 1
+    u = UNIT
+    above = P.t + u
     dots = canvas(P.w, above)
-    d = max(P.s - 1, 2)
-    rect(dots, 1, 0, 1 + d, above - 1)
-    rect(dots, P.w - 1 - d, 0, P.w - 1, above - 1)
+    d = max(P.s - u, 2 * u)
+    rect(dots, u, 0, u + d, above - u)
+    rect(dots, P.w - u - d, 0, P.w - u, above - u)
     return Drawn(dots + P.mask("E"), above=above)
 
 
@@ -375,7 +392,7 @@ def low_ф(P):
     """ф: стем от высоты заглавных до низа выносного, чаша на x-высоте."""
     lo = P.lower()
     up, s, t = P.h - P.xh, P.s, P.t
-    w = P.w + 4
+    w = P.w + 4 * UNIT
     bowl = canvas(w, P.xh)
     soft_box(bowl, 0, 0, w, P.xh, s, t)
     m = canvas(w, up) + bowl + canvas(w, P.desc)
@@ -392,7 +409,7 @@ def low_small(L):
 LOWERCASE = {
     "а": ("a", ("copy", "a")), "е": ("e", ("copy", "e")), "о": ("o", ("copy", "o")),
     "р": ("p", ("copy", "p")), "с": ("c", ("copy", "c")), "у": ("y", ("copy", "y")),
-    "х": ("x", ("copy", "x")), "п": ("n", ("copy", "n")), "м": ("m", ("copy", "m")),
+    "х": ("x", ("copy", "x")), "п": ("n", ("draw", low_small("N"))), "м": ("m", ("copy", "m")),
     "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("n", ("draw", low(cap_Б))),
     "в": ("n", ("draw", low_small("B"))), "з": ("n", ("draw", low_small("3"))),
     "к": ("n", ("draw", low_small("K"))), "н": ("n", ("draw", low_small("H"))),
