@@ -8,3 +8,17 @@ work/
 mod/
 text/en.json
 __pycache__/
+
+# Remastered (Switch): дамп игры и ключи консоли — данные Nintendo и секреты владельца, никогда не в git
+*.nsp
+*.nsz
+*.xci
+*.xcz
+*.keys
+
+# Порт, запущенный из корня (portable-режим): настройки, лог, кэши, скриншоты
+port_settings.ini
+metroid_prime_port*.log
+*.db
+archipelago.json
+screenshots/
