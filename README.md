@@ -8,6 +8,12 @@ Remastered текст рисуется HD-шрифтом с кириллицей
 
 В репозитории нет данных Nintendo: мод собирается у каждого из его собственного диска.
 
+| | |
+|---|---|
+| ![Титульный экран](docs/screenshots/title.png) | ![Главное меню](docs/screenshots/menu.png) |
+| ![Интерфейс](docs/screenshots/hud.png) | ![Пауза: снаряжение](docs/screenshots/pause.png) |
+| ![Журнал](docs/screenshots/logbook.png) | ![Карта и легенда](docs/screenshots/map.png) |
+
 ## Что нужно
 - порт **v0.33.1** (проверено на нём; работа с другими версиями не гарантируется);
 - свой образ **Metroid Prime USA 1.00** (`GM8E01`, ревизия 0) в ISO; другие ревизии и PAL
