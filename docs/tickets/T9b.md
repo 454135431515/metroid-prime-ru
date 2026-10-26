@@ -19,10 +19,10 @@
 | C74CCFA5 | Impact Crater | Кратер |
 | D79A78E1 | Phazon Mines | Фазоновые Шахты |
 | FEE1E54F | Tallon Overworld | Поверхность Таллона |
+| 38D3B39B | Magmoor Caverns (TXTR_LavaBillboard, 320×32) | Пещеры Магмура |
 | 0037F8DC, 86A38A72, 4DFF59D7, 50FA696F | Gallery 1–4 | Галерея 1–4 |
 
 ## Критерии приёмки
 - [x] превью; `test_build_mod` — заголовки всех DDS
 - [ ] в игре: поездка на лифте, бонусы → галерея
-- [ ] «Magmoor Caverns»: билборда Магмура на диске нет (все PAK) — если надпись останется английской,
-      её рисует сам порт (вопрос автору)
+- [x] «Magmoor Caverns» — TXTR_LavaBillboard 320×32: поиск по 256×32 его пропускал; найден по дампу
