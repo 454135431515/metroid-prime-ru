@@ -1,15 +1,15 @@
-# Metroid Prime — русский перевод для нативного порта
+# Metroid Prime: русский перевод для нативного порта
 
 Полный перевод Metroid Prime (GameCube, USA 1.00) для ПК/Android-порта
 [Odrannnn/MetroidPrimePort](https://github.com/Odrannnn/MetroidPrimePort): меню, подсказки,
-сканы, журнал, титры — все 2141 строки. В шрифты игры дорисована кириллица, надписи на текстурах
+сканы, журнал и титры, все 2141 строка. В шрифты игры дорисована кириллица, надписи на текстурах
 («ЭНЕРГИЯ», «НАЖМИТЕ START», названия регионов в лифтах) перерисованы по-русски. С импортом
 Remastered текст рисуется HD-шрифтом с кириллицей.
 
 В репозитории нет данных Nintendo: мод собирается у каждого из его собственного диска.
 
 ## Что нужно
-- порт **v0.33.1** (на нём проверено; с другими версиями — не гарантируется);
+- порт **v0.33.1** (проверено на нём; работа с другими версиями не гарантируется);
 - свой образ **Metroid Prime USA 1.00** (`GM8E01`, ревизия 0) в ISO; другие ревизии и PAL
   не поддерживаются;
 - Python 3 с пакетами Pillow и numpy: `pip install Pillow numpy`.
@@ -21,9 +21,9 @@ python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/
 ```
 
 Папка `mods` порта:
-- Windows — `user\mods` рядом с `metroid_prime_port.exe`;
-- Linux AppImage — `mods` рядом с файлом `.AppImage`;
-- Android — `/storage/emulated/0/MetroidPrime/mods` (сначала F1 → System → Data folder →
+- Windows: `user\mods` рядом с `metroid_prime_port.exe`;
+- Linux AppImage: `mods` рядом с файлом `.AppImage`;
+- Android: `/storage/emulated/0/MetroidPrime/mods` (сначала F1 → System → Data folder →
   общая память).
 
 Язык текста в настройках порта должен остаться английским (по умолчанию): перевод заменяет
@@ -31,24 +31,24 @@ python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/
 
 ### Remastered
 Если в той же папке `mods` уже есть импорт `remastered-models`, сборка добавляет HD-шрифт с
-кириллицей (`russian/font/deface.sdfont`) — он строится из шрифта импорта и есть только при
-нём. Импорт делается до сборки мода; после нового импорта мод нужно пересобрать. Без Remastered
+кириллицей (`russian/font/deface.sdfont`). Он строится из шрифта импорта и появляется только вместе
+с ним. Импорт делается до сборки мода; после нового импорта мод нужно пересобрать. Без Remastered
 игра использует растровые шрифты с кириллицей.
 
 Известная проблема порта: с импортом Remastered не рисуется карта
-([#207](https://github.com/Odrannnn/MetroidPrimePort/issues/207)) — от перевода не зависит.
+([#207](https://github.com/Odrannnn/MetroidPrimePort/issues/207)), от перевода она не зависит.
 
 ## Не выкладывайте собранный мод
 Собранная папка `russian` содержит изменённые файлы игры (шрифты, интерфейс, таблицы строк).
 Раздавайте этот репозиторий, а не результат сборки.
 
 ## Для разработки
-`tools/test.sh` — все проверки (нужен `work/` от `extract.py`). Тикеты — `docs/tickets/`,
-решения — `docs/adr/`, глоссарий — `text/glossary.md`.
+Все проверки: `tools/test.sh` (нужен `work/` от `extract.py`). Тикеты лежат в `docs/tickets/`,
+решения в `docs/adr/`, глоссарий в `text/glossary.md`.
 
 ## Лицензия
-Код (`tools/`) — MIT, см. `LICENSE`. Перевод и глоссарий (`text/`) — CC BY 4.0, см.
-`text/LICENSE`. Metroid Prime — товарный знак Nintendo; проект с Nintendo не связан.
+Код (`tools/`) под лицензией MIT, см. `LICENSE`. Перевод и глоссарий (`text/`) под CC BY 4.0,
+см. `text/LICENSE`. Metroid Prime является товарным знаком Nintendo; проект с Nintendo не связан.
 
 ---
 
