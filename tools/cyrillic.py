@@ -257,6 +257,20 @@ def cap_И(P):
     return Drawn(stems_diag(P, P.w + 2 * UNIT, P.h))
 
 
+def cap_М(P):
+    """М: два стема и две диагонали из верхних углов к середине (V). Латинская m Deface — три
+    ножки под перекладиной — читается как рукописная т («терцающие» вместо «мерцающие»)."""
+    s, w, h = P.s, P.w + 4 * UNIT, P.h
+    d = max(s - UNIT, 2 * UNIT)
+    m = canvas(w, h)
+    rect(m, 0, 0, s, h)
+    rect(m, w - s, 0, w, h)
+    mid, low_y = (w - d) // 2, h * 2 // 3
+    diagonal(m, s - UNIT, 0, mid, low_y, d)
+    diagonal(m, w - s - d + UNIT, 0, w - mid - d, low_y, d)
+    return Drawn(m)
+
+
 def cap_Й(P):
     w = P.w + 2 * UNIT
     m = stems_diag(P, w, P.h)
@@ -409,7 +423,7 @@ def low_small(L):
 LOWERCASE = {
     "а": ("a", ("copy", "a")), "е": ("e", ("copy", "e")), "о": ("o", ("copy", "o")),
     "р": ("p", ("copy", "p")), "с": ("c", ("copy", "c")), "у": ("y", ("copy", "y")),
-    "х": ("x", ("copy", "x")), "п": ("n", ("draw", low_small("N"))), "м": ("m", ("copy", "m")),
+    "х": ("x", ("copy", "x")), "п": ("n", ("draw", low_small("N"))), "м": ("n", ("draw", low(cap_М))),
     "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("n", ("draw", low(cap_Б))),
     "в": ("n", ("draw", low_small("B"))), "з": ("n", ("draw", low_small("3"))),
     "к": ("n", ("draw", low_small("K"))), "н": ("n", ("draw", low_small("H"))),
