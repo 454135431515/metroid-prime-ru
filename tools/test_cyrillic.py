@@ -35,6 +35,32 @@ def main(work):
             assert 0 < x and x + w < a.width and 0 < y and y + h < a.height, (fid, ch)
             assert any(v == cyrillic.INK for r in cyrillic.cell_pixels(a, g) for v in r), (fid, ch)
     print(f"cyrillic: {len(cyrillic.FONTS)} fonts ok, +{len(cyrillic.RECIPES)} glyphs each")
+    return test_hd_font(os.path.join(os.path.dirname(os.path.abspath(work)), "mod", "remastered-models",
+                                     "font", "deface.sdfont"))
+
+
+def test_hd_font(src):
+    """HD-шрифт: латиница побайтно та же, все русские буквы есть и лежат в атласе."""
+    if not os.path.isfile(src):
+        print("hd font: импорта Remastered нет, пропуск")
+        return 0
+    import tempfile
+    import hd_font
+    dst = os.path.join(tempfile.mkdtemp(), "deface.sdfont")
+    hd_font.build(src, dst)
+    w, h, _, _, old, d0 = hd_font.read(src)
+    nw, nh, _, _, new, d1 = hd_font.read(dst)
+    by = {g[0]: g for g in new}
+    for g in old:
+        x0, y0, x1, y1 = hd_font.region(g, w, h)
+        n = by[g[0]]
+        assert n[1:5] == g[1:5] and n[9] == g[9], chr(g[0])
+        assert (hd_font.region(n, nw, nh) == (x0, y0, x1, y1)
+                and (d1[y0:y1, x0:x1] == d0[y0:y1, x0:x1]).all()), chr(g[0])
+    for ch in {**cyrillic.CAPITALS, **cyrillic.LOWERCASE}:
+        x0, y0, x1, y1 = hd_font.region(by[ord(ch)], nw, nh)
+        assert 0 <= x0 < x1 <= nw and 0 <= y0 < y1 <= nh and (d1[y0:y1, x0:x1] > 127).any(), ch
+    os.remove(dst)
     return 0
 
 
