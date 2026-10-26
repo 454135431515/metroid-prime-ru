@@ -409,7 +409,7 @@ def low_small(L):
 LOWERCASE = {
     "а": ("a", ("copy", "a")), "е": ("e", ("copy", "e")), "о": ("o", ("copy", "o")),
     "р": ("p", ("copy", "p")), "с": ("c", ("copy", "c")), "у": ("y", ("copy", "y")),
-    "х": ("x", ("copy", "x")), "п": ("n", ("copy", "n")), "м": ("m", ("copy", "m")),
+    "х": ("x", ("copy", "x")), "п": ("n", ("draw", low_small("N"))), "м": ("m", ("copy", "m")),
     "ш": ("w", ("copy", "w")), "г": ("r", ("copy", "r")), "б": ("n", ("draw", low(cap_Б))),
     "в": ("n", ("draw", low_small("B"))), "з": ("n", ("draw", low_small("3"))),
     "к": ("n", ("draw", low_small("K"))), "н": ("n", ("draw", low_small("H"))),
