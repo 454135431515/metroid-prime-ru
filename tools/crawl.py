@@ -1,14 +1,15 @@
 """Прогон на вылеты: порт с модом по очереди загружает каждую комнату каждого мира.
 
     python -I tools/crawl.py <ISO> <AppRun порта> <папка модов> <отчёт.tsv> [--frames N] [--only MLVL]
-                             [--resume прошлый_отчёт.tsv]
+                             [--resume прошлый_отчёт.tsv] [--all-mods]
 
 Порт запускается с отдельной user-папкой (work/user-crawl — копия work/user без быстрого
 продолжения; сохранения владельца не трогаются, карта памяти только читается) и консолью
 MP_CONSOLE. Игра загружается со слота A, дальше `warp <MLVL> <MREA>` в каждую комнату и
 N кадров ожидания; неуязвимость (`god on`), чтобы лава не прерывала прогон. Вылет = порт перестал отвечать: строка в отчёте, хвост лога, перезапуск,
 продолжение со следующей комнаты. Ошибки загрузки ресурсов (`failed to load`, `Truncated`)
-пишутся в отчёт, даже если порт не упал.
+пишутся в отчёт, даже если порт не упал. `--all-mods` включает в копии настроек моды, выключенные
+владельцем (`mods_disabled`), — например импорт Remastered.
 """
 
 import os
@@ -73,10 +74,15 @@ class Console:
         return None
 
 
-def start(apprun, mods, iso):
+def start(apprun, mods, iso, all_mods=False):
     if os.path.isdir(USER):
         shutil.rmtree(USER)
     shutil.copytree("work/user", USER)
+    ini = os.path.join(USER, "port_settings.ini")
+    if all_mods and os.path.exists(ini):
+        lines = open(ini, encoding="utf-8").read().splitlines()
+        open(ini, "w", encoding="utf-8").write(
+            "\n".join("mods_disabled=" if ln.startswith("mods_disabled=") else ln for ln in lines) + "\n")
     resume = os.path.join(USER, "savestates", "resume.mpss")
     if os.path.exists(resume):
         os.remove(resume)
@@ -121,6 +127,7 @@ def new_bad(since):
 def main(iso, apprun, mods, report, *opts):
     frames = int(opts[opts.index("--frames") + 1]) if "--frames" in opts else 180
     only = opts[opts.index("--only") + 1].upper() if "--only" in opts else None
+    all_mods = "--all-mods" in opts
     plan = [(w, a) for w, areas in worlds(iso) for a in areas if not only or f"{w:08X}" == only]
     rows = []
     if "--resume" in opts:  # прошлый отчёт: комнаты с «ok» не повторяются
@@ -128,7 +135,7 @@ def main(iso, apprun, mods, report, *opts):
         done = {(int(r[0], 16), int(r[1], 16)) for r in prev if r[2] == "ok"}
         rows = ["\t".join(r) for r in prev if r[2] == "ok"]
         plan = [p for p in plan if p not in done]
-    proc, con = start(apprun, mods, iso)
+    proc, con = start(apprun, mods, iso, all_mods)
     i = 0
     while i < len(plan):
         w, a = plan[i]
@@ -136,7 +143,7 @@ def main(iso, apprun, mods, report, *opts):
         if con is None:
             rows.append(f"{key}\tне стартовал\t" + " | ".join(log_tail(5)))
             proc.kill()
-            proc, con = start(apprun, mods, iso)
+            proc, con = start(apprun, mods, iso, all_mods)
             i += 1
             continue
         mark = log_size()
@@ -154,7 +161,7 @@ def main(iso, apprun, mods, report, *opts):
             print(f"[{i + 1}/{len(plan)}] {key} ВЫЛЕТ", flush=True)
             proc.kill()
             proc.wait()
-            proc, con = start(apprun, mods, iso)
+            proc, con = start(apprun, mods, iso, all_mods)
         else:
             status = "ok" if r and r[1] else "warp: " + (r[0].strip()[:120] if r else "нет ответа")
             rows.append(f"{key}\t{status}\t" + " | ".join(bad[:5]))
