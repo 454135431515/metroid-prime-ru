@@ -15,7 +15,7 @@ Remastered текст рисуется HD-шрифтом с кириллицей
 | ![Журнал](docs/screenshots/logbook.png) | ![Карта и легенда](docs/screenshots/map.png) |
 
 ## Что нужно
-- порт **v0.33.1** (проверено на нём; работа с другими версиями не гарантируется);
+- порт **v0.34.0** (проверено на нём; работа с другими версиями не гарантируется);
 - свой образ **Metroid Prime USA 1.00** (`GM8E01`, ревизия 0) в ISO; другие ревизии и PAL
   не поддерживаются;
 - Python 3 с пакетами Pillow и numpy: `pip install Pillow numpy`.
@@ -59,7 +59,7 @@ python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/
 ---
 
 **English.** A complete Russian translation of Metroid Prime (GameCube USA 1.00) for the native
-[MetroidPrimePort](https://github.com/Odrannnn/MetroidPrimePort) (v0.33.1). No Nintendo data is
+[MetroidPrimePort](https://github.com/Odrannnn/MetroidPrimePort) (v0.34.0). No Nintendo data is
 included: build the mod from your own disc with the two commands above (Python 3, Pillow, numpy)
 and put the `russian` folder into the port's `mods` folder. With the Remastered import present,
 the build also adds a Cyrillic HD font. Code is MIT, translation text is CC BY 4.0.
