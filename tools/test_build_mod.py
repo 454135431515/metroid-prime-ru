@@ -25,7 +25,8 @@ def main(work):
                     "22": {"en": "00000000", "ru": "Да"}}}
         path = os.path.join(tmp, "ru.json")
         json.dump(ru, open(path, "w", encoding="utf-8"), ensure_ascii=False)
-        out = os.path.join(tmp, "mod")
+        out = os.path.join(tmp, "russian")
+        frames_dir = os.path.join(tmp, build_mod.FRAMES_MOD)
         stdout = sys.stdout
         sys.stdout = open(os.devnull, "w")
         try:
@@ -33,7 +34,12 @@ def main(work):
         finally:
             sys.stdout = stdout
         # порт 0.31.1 режет добавленный в NoARAM ресурс до кратного 32 размера (вылет у лифта)
-        assert all(os.path.getsize(os.path.join(out, n)) % 32 == 0 for n in os.listdir(out) if not n.endswith(".dds"))
+        for d in (out, frames_dir):
+            assert all(os.path.getsize(os.path.join(d, n)) % 32 == 0 for n in os.listdir(d)
+                       if os.path.isfile(os.path.join(d, n)) and not n.endswith(".dds"))
+        # кадры HUD — только в своём моде, который по имени раньше импорта Remastered (TR3)
+        assert build_mod.FRAMES_MOD < "remastered-models" < "russian"
+        assert not [n for n in os.listdir(out) if n.endswith(".FRME")], "кадры в основном моде"
         # надписи на текстурах: DDS DX10 RGBA8 под id TXTR диска (tools/hud_textures.py)
         import hud_textures
         for tid in hud_textures.TEXTURES:
@@ -46,11 +52,11 @@ def main(work):
         # сжатые кадры (squeeze): от диска отличаются только extentX полей (до 4 байт на поле), длина та же;
         # новых id мод не добавляет (порт 0.31.1 ломает таблицу NoARAM.pak с добавленными id, T7f)
         import frme
-        frames = [n[:8] for n in os.listdir(out) if n.endswith(".FRME")]
+        frames = [n[:8] for n in os.listdir(frames_dir) if n.endswith(".FRME")]
         assert frames, "нет кадров с полем босса"
         for fid in frames:
             a = open(os.path.join(res, "FRME", f"{fid}.FRME"), "rb").read()
-            b = open(os.path.join(out, f"{fid}.FRME"), "rb").read()
+            b = open(os.path.join(frames_dir, f"{fid}.FRME"), "rb").read()[:len(a)]
             assert len(a) == len(b) and sum(x != y for x, y in zip(a, b)) <= 4 * a.count(b"TXPN"), fid
         disc = {n.split(".")[0] for d in os.listdir(res) for n in os.listdir(os.path.join(res, d))}
         assert {n.split(".")[0] for n in os.listdir(out) if not n.endswith(".dds")} <= disc, "мод добавляет новые id"

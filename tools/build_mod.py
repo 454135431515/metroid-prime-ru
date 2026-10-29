@@ -24,6 +24,13 @@ def en_hash(text):
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
 
 
+# Кадры HUD (FRME) — отдельным модом, который по имени раньше «remastered-models»: моды применяются
+# по имени, поздний выигрывает. С импортом Remastered его кадры HUD (свои поля, мини-карта, карта)
+# перекрывают наши копии кадров диска; без него (переключатель графики порта) работают наши.
+# Наш кадр поверх кадра Remastered ломал карту и мини-карту (TR3).
+FRAMES_MOD = "hud-russian"
+
+
 def patch_frames(res, out, panes_path="text/panes.json"):
     """Кадры FRME, где правило panes.json сжимает поле по ширине («squeeze»): копия кадра диска
     с шире областью вёрстки этого поля (frme.squeeze_pane) кладётся в мод. Новых ресурсов мод не
@@ -91,8 +98,13 @@ def build(res, ru_path, out, base=None):
         import hd_font
         os.makedirs(os.path.join(out, "font"))
         hd_font.build(hd, os.path.join(out, "font", "deface.sdfont"))
-    patch_frames(res, out)
+    frames = os.path.join(os.path.dirname(os.path.abspath(out)), FRAMES_MOD)
+    if os.path.isdir(frames):
+        shutil.rmtree(frames)
+    os.makedirs(frames)
+    patch_frames(res, frames)
     pad_to_32(out)
+    pad_to_32(frames)
     print(f"mod: {len(ru)} tables, {written} strings, {stale} stale -> {out}")
     return stale
 

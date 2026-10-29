@@ -26,6 +26,9 @@ python -I tools/extract.py "Metroid Prime (USA).iso" work
 python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/russian
 ```
 
+Сборка создаёт в папке `mods` две папки: `russian` (текст, шрифты, надписи на текстурах) и
+`hud-russian` (кадры HUD). Нужны обе; если собирали в другом месте, скопируйте в `mods` обе.
+
 Папка `mods` порта:
 - Windows: `user\mods` рядом с `metroid_prime_port.exe`;
 - Linux AppImage: `mods` рядом с файлом `.AppImage`;
@@ -45,7 +48,7 @@ python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/
 ([#207](https://github.com/Odrannnn/MetroidPrimePort/issues/207)), от перевода она не зависит.
 
 ## Не выкладывайте собранный мод
-Собранная папка `russian` содержит изменённые файлы игры (шрифты, интерфейс, таблицы строк).
+Собранные папки `russian` и `hud-russian` содержат изменённые файлы игры (шрифты, интерфейс, таблицы строк).
 Раздавайте этот репозиторий, а не результат сборки.
 
 ## Для разработки
@@ -61,5 +64,5 @@ python -I tools/build_mod.py work/res text/ru.json <папка mods порта>/
 **English.** A complete Russian translation of Metroid Prime (GameCube USA 1.00) for the native
 [MetroidPrimePort](https://github.com/Odrannnn/MetroidPrimePort) (v0.35.1). No Nintendo data is
 included: build the mod from your own disc with the two commands above (Python 3, Pillow, numpy)
-and put the `russian` folder into the port's `mods` folder. With the Remastered import present,
+and put the `russian` and `hud-russian` folders into the port's `mods` folder. With the Remastered import present,
 the build also adds a Cyrillic HD font. Code is MIT, translation text is CC BY 4.0.
